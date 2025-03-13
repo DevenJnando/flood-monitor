@@ -3,7 +3,6 @@ import {FloodArea} from "@/app/services/flood-api-interfaces";
 import {getFloodAreaGeoJson} from "@/app/services/flood-api-calls";
 
 
-
 export async function addSourceToMapWithLayer(mapRef: MapRef | null, floodArea: FloodArea) {
     if(mapRef){
         await addFloodAreaToMap(mapRef, floodArea);

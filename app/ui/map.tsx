@@ -1,31 +1,45 @@
 'use client'
 import {Map} from "react-map-gl/mapbox";
+import 'mapbox-gl/dist/mapbox-gl.css';
 import * as React from "react";
 import {MapRef} from "react-map-gl/mapbox";
 import {useRef} from "react";
 import {Suspense} from "react";
-import {getAllFloodAreas, getCurrentFloods} from '@/app/services/flood-api-calls'
 import {addSourceToMapWithLayer} from "@/app/ui/map-functions";
 import {FloodWarning} from "@/app/services/flood-api-interfaces";
+import {useDispatchContext} from "@/app/hooks/map-hook";
+import {Markers} from "@/app/ui/map-widgets";
 
-const currentFloodsArray = await getCurrentFloods();
 
-
-export function populateMap(mapRef: MapRef | null) {
-    currentFloodsArray.map((floodWarning: FloodWarning) => {
-        console.log(floodWarning.floodArea["@id"]);
-        void addSourceToMapWithLayer(mapRef, floodWarning.floodArea);
-    });
-}
-
-export default function FloodMap() {
+export default function FloodMap({currentFloodsArray}: {
+    currentFloodsArray: FloodWarning[];
+}) {
 
     const mapRef = useRef<MapRef>(null);
+    const dispatchContext = useDispatchContext();
     const [viewState, setViewState] = React.useState({
         longitude: -1.47663,
         latitude: 52.92277,
         zoom: 6
     });
+
+    function populateMap(mapRef: MapRef | null) {
+        currentFloodsArray.map((floodWarning: FloodWarning) => {
+            //void addSourceToMapWithLayer(mapRef, floodWarning.floodArea);
+            if(floodWarning.detailedFloodArea){
+                dispatchContext({type: "ADD_MARKER",
+                    payload:{
+                    marker:
+                        {
+                            long: floodWarning.detailedFloodArea.long,
+                            lat: floodWarning.detailedFloodArea.lat,
+                            severityLevel: floodWarning.severityLevel
+                        }
+                    }
+                });
+            }
+        },[currentFloodsArray]);
+    }
 
    return( <div className="flex w-full items-center justify-between">
            <Map
@@ -40,7 +54,14 @@ export default function FloodMap() {
                        populateMap(mapRef.current);
                    }
                }}
-            />
+               onClick={(e) => {
+                   if(mapRef) {
+                       populateMap(mapRef.current);
+                   }
+               }}
+            >
+               <Markers />
+           </Map>
            <Suspense fallback={<div>Loading...</div>}>
                <div id={"current-floods"}>
                    {currentFloodsArray.map((floodWarning: FloodWarning) => (
