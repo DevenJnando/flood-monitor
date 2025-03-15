@@ -6,15 +6,15 @@ import {MapRef} from "react-map-gl/mapbox";
 import {useRef} from "react";
 import {Suspense} from "react";
 import {addSourceToMapWithLayer} from "@/app/ui/map-functions";
-import {FloodWarning} from "@/app/services/flood-api-interfaces";
+import {DetailedFloodAreaWithWarning, FloodWarning} from "@/app/services/flood-api-interfaces";
 import {useDispatchContext} from "@/app/hooks/map-hook";
 import {Markers} from "@/app/ui/map-widgets";
+import {GeoJSON} from "geojson";
 
 
-export default function FloodMap({currentFloodsArray}: {
-    currentFloodsArray: FloodWarning[];
+export default function FloodMap({currentFloodsMap}: {
+    currentFloodsMap: Map<string, DetailedFloodAreaWithWarning>;
 }) {
-
     const mapRef = useRef<MapRef>(null);
     const dispatchContext = useDispatchContext();
     const [viewState, setViewState] = React.useState({
@@ -24,21 +24,31 @@ export default function FloodMap({currentFloodsArray}: {
     });
 
     function populateMap(mapRef: MapRef | null) {
-        currentFloodsArray.map((floodWarning: FloodWarning) => {
-            //void addSourceToMapWithLayer(mapRef, floodWarning.floodArea);
-            if(floodWarning.detailedFloodArea){
-                dispatchContext({type: "ADD_MARKER",
-                    payload:{
-                    marker:
-                        {
-                            long: floodWarning.detailedFloodArea.long,
-                            lat: floodWarning.detailedFloodArea.lat,
-                            severityLevel: floodWarning.severityLevel
-                        }
+        Array.from(currentFloodsMap.values()).map((floodAreaWithWarning: DetailedFloodAreaWithWarning) => {
+            console.log(floodAreaWithWarning.currentWarning?.floodAreaGeoJson);
+            mapRef?.getMap().addSource(floodAreaWithWarning.notation,
+                {type:"geojson", data: floodAreaWithWarning.currentWarning?.floodAreaGeoJson});
+            mapRef?.getMap().addLayer({
+                id: floodAreaWithWarning.notation,
+                type: 'line',
+                source: floodAreaWithWarning.notation,
+                layout: {},
+                paint: {
+                    'line-color': '#000',
+                    'line-width': 3
+                }
+            });
+            dispatchContext({type: "ADD_MARKER",
+                payload:{
+                marker:
+                    {
+                        long: floodAreaWithWarning.long,
+                        lat: floodAreaWithWarning.lat,
+                        severityLevel: floodAreaWithWarning.currentWarning?.severityLevel
                     }
-                });
-            }
-        },[currentFloodsArray]);
+                }
+            });
+        });
     }
 
    return( <div className="flex w-full items-center justify-between">
@@ -54,24 +64,9 @@ export default function FloodMap({currentFloodsArray}: {
                        populateMap(mapRef.current);
                    }
                }}
-               onClick={(e) => {
-                   if(mapRef) {
-                       populateMap(mapRef.current);
-                   }
-               }}
             >
                <Markers />
            </Map>
-           <Suspense fallback={<div>Loading...</div>}>
-               <div id={"current-floods"}>
-                   {currentFloodsArray.map((floodWarning: FloodWarning) => (
-                       <p className="mt-2 text-sm font-bold text-blue-400"
-                          key={floodWarning["@id"]}>
-                           {floodWarning.description}
-                       </p>
-                   ))}
-               </div>
-           </Suspense>
             </div>
    );
 }

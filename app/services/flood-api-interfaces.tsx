@@ -34,6 +34,10 @@ export interface DetailedFloodArea extends FloodArea {
     "type": [];
 }
 
+export interface DetailedFloodAreaWithWarning extends DetailedFloodArea {
+    "currentWarning"?: FloodWarning;
+}
+
 export interface FloodWarning {
     "@id": string;
     "description"?: string;
