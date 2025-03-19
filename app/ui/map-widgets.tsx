@@ -4,14 +4,20 @@ import {Source} from "react-map-gl/mapbox";
 import {useStateContext} from "@/app/hooks/map-hook";
 import {Fragment} from "react";
 import Image from "next/image";
+import {useRouter} from "next/navigation";
 
 export const Markers = () => {
     const { markers } = useStateContext();
+    const router = useRouter();
     return(
         <Fragment>
             {markers.map((marker, i) => (
                 <Marker
                     key={i}
+                    onClick={() => {
+                        router.replace(`/?floodWarning=${marker.warning.floodAreaID}`, undefined)
+                        console.log("marker clicked!");
+                    }}
                     latitude={marker.lat}
                     longitude={marker.long}>
                     {marker.severityLevel === 1 &&
@@ -50,62 +56,15 @@ export const Layers = () => {
         <Fragment>
             {layers.map((layer, i) => (
                 <Fragment key={i}>
-                    {layer.severityLevel === 1 &&
-                            <Layer
-                                key={i}
-                                id={layer.id}
-                                type={layer.type}
-                                source={layer.source}
-                                layout={{}}
-                                paint={{
-                                    'line-color': '#720101',
-                                    'line-width': 3
-                                }}
-                            >
-                            </Layer>
-                    }
-                    {layer.severityLevel === 2 &&
-                        <Layer
-                            key={i}
-                            id={layer.id}
-                            type={layer.type}
-                            source={layer.source}
-                            layout={{}}
-                            paint={{
-                                'line-color': '#f80a0a',
-                                'line-width': 3
-                            }}
-                        >
-                        </Layer>
-                    }
-                    {layer.severityLevel === 3 &&
-                        <Layer
-                            key={i}
-                            id={layer.id}
-                            type={layer.type}
-                            source={layer.source}
-                            layout={{}}
-                            paint={{
-                                'line-color': '#edf50a',
-                                'line-width': 3
-                            }}
-                        >
-                        </Layer>
-                    }
-                    {layer.severityLevel === 4 &&
-                        <Layer
-                            key={i}
-                            id={layer.id}
-                            type={layer.type}
-                            source={layer.source}
-                            layout={{}}
-                            paint={{
-                                'line-color': '#118626',
-                                'line-width': 3
-                            }}
-                        >
-                        </Layer>
-                    }
+                    <Layer
+                        key={i}
+                        id={layer.id}
+                        type={layer.type}
+                        source={layer.source}
+                        layout={{}}
+                        paint={layer.paint}
+                    >
+                    </Layer>
                 </Fragment>
             ))}
         </Fragment>

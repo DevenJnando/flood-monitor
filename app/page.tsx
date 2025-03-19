@@ -11,16 +11,18 @@ import {
 } from "@/app/services/flood-api-interfaces";
 import {MapProvider} from "@/app/hooks/map-hook";
 
-export default async function Home() {
 
-    const currentFloodsMap: Map<string, DetailedFloodAreaWithWarning> = new Map<string, DetailedFloodAreaWithWarning>();
-    const currentFloodsArray: DetailedFloodAreaWithWarning[] = await getDetailedFloodAreasWithWarnings().then((floodWarnings) =>{
-        return floodWarnings;
-    });
-    currentFloodsArray.map((floodAreaWithWarning) => {
-        currentFloodsMap.set(floodAreaWithWarning.notation, floodAreaWithWarning);
-    })
-    await updateFloodAreaGeoJsons(currentFloodsMap, currentFloodsArray)
+const currentFloodsMap: Map<string, DetailedFloodAreaWithWarning> = new Map<string, DetailedFloodAreaWithWarning>();
+const currentFloodsArray: DetailedFloodAreaWithWarning[] = await getDetailedFloodAreasWithWarnings().then((floodWarnings) =>{
+    return floodWarnings;
+});
+currentFloodsArray.map((floodAreaWithWarning) => {
+    currentFloodsMap.set(floodAreaWithWarning.notation, floodAreaWithWarning);
+})
+await updateFloodAreaGeoJsons(currentFloodsMap, currentFloodsArray)
+
+
+export default function Home() {
 
     return (
         <div className="grid grid-rows-[10px_1fr_10px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
