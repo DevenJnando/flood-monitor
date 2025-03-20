@@ -1,8 +1,9 @@
 'use client'
-import {useContext, useReducer, createContext, Context} from "react";
+import {useReducer, createContext} from "react";
 import {LayerProps} from "react-map-gl/mapbox";
 import {Feature, FeatureCollection} from "geojson";
 import {FloodWarning} from "@/app/services/flood-api-interfaces";
+import {useContextWrapper} from "@/app/hooks/context-wrapper";
 
 const mapStateContext = createContext({
     markers: [{long: 0, lat: 0, severityLevel: 0}],
@@ -10,14 +11,11 @@ const mapStateContext = createContext({
     sources: [{id: '', data: {}}]
 });
 const mapDispatchContext = createContext((action: any) => {});
-const selectedFloodWarningStateContext = createContext({});
-const selectedFloodWarningDispatchContext = createContext({});
 
 
 export const MapProvider = ({children}: any) => {
     const [state, dispatch] = useReducer(MapReducer, {markers: [], layers: [], sources: []});
     return (
-        // @ts-ignore
         <mapStateContext.Provider value={state}>
             <mapDispatchContext.Provider value={dispatch}>
                 {children}
@@ -81,13 +79,6 @@ export const MapReducer = (
     return state;
 }
 
-const useContextWrapper = (contextToUse: Context<any>) => {
-    const context = useContext(contextToUse);
-    if(!context) {
-        throw new Error("Context may have been requested outside of MapProvider.");
-    }
-    return context;
-}
 
 export const useStateContext = () => {
     return useContextWrapper(mapStateContext);
@@ -95,12 +86,4 @@ export const useStateContext = () => {
 
 export const useDispatchContext = () => {
     return useContextWrapper(mapDispatchContext);
-}
-
-export const useSelectedFloodWarningStateContext = () => {
-    return useContextWrapper(selectedFloodWarningStateContext);
-}
-
-export const useSelectedFloodWarningDispatchContext = () => {
-    return useContextWrapper(selectedFloodWarningDispatchContext);
 }

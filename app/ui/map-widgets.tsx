@@ -2,21 +2,21 @@ import {Marker} from "react-map-gl/mapbox";
 import {Layer} from "react-map-gl/mapbox";
 import {Source} from "react-map-gl/mapbox";
 import {useStateContext} from "@/app/hooks/map-hook";
+import {useSelectedFloodWarningDispatchContext} from "@/app/hooks/selected-flood-hook";
 import {Fragment} from "react";
 import Image from "next/image";
-import {useRouter} from "next/navigation";
 
 export const Markers = () => {
     const { markers } = useStateContext();
-    const router = useRouter();
+    const selectedFloodDispatchContext = useSelectedFloodWarningDispatchContext();
     return(
         <Fragment>
             {markers.map((marker, i) => (
                 <Marker
                     key={i}
                     onClick={() => {
-                        router.replace(`/?floodWarning=${marker.warning.floodAreaID}`, undefined)
-                        console.log("marker clicked!");
+                        selectedFloodDispatchContext({type: "SELECT_WARNING",
+                        payload: {newWarning: marker.warning}});
                     }}
                     latitude={marker.lat}
                     longitude={marker.long}>

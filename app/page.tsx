@@ -10,6 +10,8 @@ import {
     DetailedFloodAreaWithWarning
 } from "@/app/services/flood-api-interfaces";
 import {MapProvider} from "@/app/hooks/map-hook";
+import SelectedFlood from "@/app/ui/selected-flood";
+import {SelectedFloodProvider} from "@/app/hooks/selected-flood-hook";
 
 
 const currentFloodsMap: Map<string, DetailedFloodAreaWithWarning> = new Map<string, DetailedFloodAreaWithWarning>();
@@ -35,16 +37,17 @@ export default function Home() {
               height={38}
               priority
             />
-              <Suspense fallback={"Loading..."}>
-                  <div className="flex flex-col">
-                      <p>this uses Environment Agency flood and river level data from the real-time data API (Beta)</p>
-                  </div>
-                  <MapProvider>
+              <div className="flex flex-col">
+                  <p>this uses Environment Agency flood and river level data from the real-time data API (Beta)</p>
+              </div>
+              <MapProvider>
+                  <SelectedFloodProvider>
                       <FloodMap
                           currentFloodsMap={currentFloodsMap}
                       />
-                  </MapProvider>
-              </Suspense>
+                      <SelectedFlood/>
+                  </SelectedFloodProvider>
+              </MapProvider>
           </main>
           <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
           </footer>

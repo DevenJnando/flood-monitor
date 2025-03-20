@@ -2,7 +2,7 @@
 import {Map} from "react-map-gl/mapbox";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import * as React from "react";
-import {DetailedFloodAreaWithWarning} from "@/app/services/flood-api-interfaces";
+import {DetailedFloodAreaWithWarning, FloodWarning} from "@/app/services/flood-api-interfaces";
 import {useDispatchContext} from "@/app/hooks/map-hook";
 import {Layers, Markers, Sources} from "@/app/ui/map-widgets";
 import {GeoJSON} from "geojson";
@@ -100,34 +100,34 @@ export default function FloodMap({currentFloodsMap}: {
 
     function populateMap() {
         Array.from(currentFloodsMap.values()).map((floodAreaWithWarning: DetailedFloodAreaWithWarning) => {
-            addSource(floodAreaWithWarning.notation, floodAreaWithWarning.currentWarning?.floodAreaGeoJson);
+            addSource(floodAreaWithWarning.notation, floodAreaWithWarning.currentWarning.floodAreaGeoJson);
             addLayer(
                 floodAreaWithWarning.notation + " line", "line",
                 floodAreaWithWarning.notation,
-                floodAreaWithWarning.currentWarning?.severityLevel);
+                floodAreaWithWarning.currentWarning.severityLevel);
             addLayer(
                 floodAreaWithWarning.notation + " fill", "fill",
                 floodAreaWithWarning.notation,
-                floodAreaWithWarning.currentWarning?.severityLevel);
+                floodAreaWithWarning.currentWarning.severityLevel);
             addMarker(floodAreaWithWarning.currentWarning, floodAreaWithWarning.long, floodAreaWithWarning.lat);
         });
     }
 
    return( <div className="flex w-full items-center justify-between">
-           <Map
-               {...viewState}
-               onMove={e =>setViewState(e.viewState)}
-               style={{width: 800, height: 600}}
-               mapStyle={"https://api.maptiler.com/maps/streets/style.json?key=U2udwPDvVDDdAolS5wws"}
-               mapboxAccessToken="pk.eyJ1IjoiY3JlbmFuZDAiLCJhIjoiY204MXRlY3lsMG1tcjJscXJzdThhMnRnbiJ9.MyrIyAKS0lnO1CP12NCguA"
-               onLoad={(e) => {
-                   populateMap();
-               }}
-            >
-               <Markers />
-               <Sources />
-               <Layers />
-           </Map>
+               <Map
+                   {...viewState}
+                   onMove={e =>setViewState(e.viewState)}
+                   style={{width: 800, height: 600}}
+                   mapStyle={"https://api.maptiler.com/maps/streets/style.json?key=U2udwPDvVDDdAolS5wws"}
+                   mapboxAccessToken="pk.eyJ1IjoiY3JlbmFuZDAiLCJhIjoiY204MXRlY3lsMG1tcjJscXJzdThhMnRnbiJ9.MyrIyAKS0lnO1CP12NCguA"
+                   onLoad={(e) => {
+                       populateMap();
+                   }}
+                >
+                   <Markers />
+                   <Sources />
+                   <Layers />
+               </Map>
             </div>
    );
 }
