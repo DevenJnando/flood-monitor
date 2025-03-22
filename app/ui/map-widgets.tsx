@@ -3,20 +3,28 @@ import {Layer} from "react-map-gl/mapbox";
 import {Source} from "react-map-gl/mapbox";
 import {useStateContext} from "@/app/hooks/map-hook";
 import {useSelectedFloodWarningDispatchContext} from "@/app/hooks/selected-flood-hook";
-import {Fragment} from "react";
+import {Fragment, Key} from "react";
 import Image from "next/image";
+import { GeoJSON, Geometry, GeoJsonProperties } from "geojson";
 
 export const Markers = () => {
-    const { markers } = useStateContext();
+    const {markers} = useStateContext();
     const selectedFloodDispatchContext = useSelectedFloodWarningDispatchContext();
-    return(
+    return (
         <Fragment>
-            {markers.map((marker, i) => (
+            {markers.map((marker: {
+                warning: any;
+                lat: number;
+                long: number;
+                severityLevel: number;
+            }, i: Key | null | undefined) => (
                 <Marker
                     key={i}
                     onClick={() => {
-                        selectedFloodDispatchContext({type: "SELECT_WARNING",
-                        payload: {newWarning: marker.warning}});
+                        selectedFloodDispatchContext({
+                            type: "SELECT_WARNING",
+                            payload: {newWarning: marker.warning}
+                        });
                     }}
                     latitude={marker.lat}
                     longitude={marker.long}>
@@ -51,14 +59,20 @@ export const Markers = () => {
 }
 
 export const Layers = () => {
-    const { layers } = useStateContext();
+    const {layers} = useStateContext();
     return (
         <Fragment>
-            {layers.map((layer, i) => (
+            {layers.map((layer: {
+                id: string | undefined;
+                type: string;
+                source: string | undefined;
+                paint: {} | undefined;
+            }, i: Key | null | undefined) => (
                 <Fragment key={i}>
                     <Layer
                         key={i}
                         id={layer.id}
+                        // @ts-ignore
                         type={layer.type}
                         source={layer.source}
                         layout={{}}
@@ -72,17 +86,19 @@ export const Layers = () => {
 }
 
 export const Sources = () => {
-    const { sources } = useStateContext();
+    const {sources} = useStateContext();
     return (
         <Fragment>
-            {sources.map((source, i) => (
+            {sources.map((source: {
+                id: string | undefined;
+                data: string | GeoJSON<Geometry, GeoJsonProperties> | undefined;
+            }, i: Key | null | undefined) => (
                 <Source
                     key={i}
                     type="geojson"
                     id={source.id}
                     data={source.data}
                 >
-
                 </Source>
             ))}
         </Fragment>

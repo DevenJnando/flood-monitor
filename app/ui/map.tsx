@@ -42,6 +42,8 @@ export default function FloodMap({currentFloodsMap}: {
                     'fill-color': color,
                     'fill-opacity': modifier
                 }
+            default:
+                return {}
         }
     }
 
@@ -100,16 +102,20 @@ export default function FloodMap({currentFloodsMap}: {
 
     function populateMap() {
         Array.from(currentFloodsMap.values()).map((floodAreaWithWarning: DetailedFloodAreaWithWarning) => {
-            addSource(floodAreaWithWarning.notation, floodAreaWithWarning.currentWarning.floodAreaGeoJson);
-            addLayer(
-                floodAreaWithWarning.notation + " line", "line",
-                floodAreaWithWarning.notation,
-                floodAreaWithWarning.currentWarning.severityLevel);
-            addLayer(
-                floodAreaWithWarning.notation + " fill", "fill",
-                floodAreaWithWarning.notation,
-                floodAreaWithWarning.currentWarning.severityLevel);
-            addMarker(floodAreaWithWarning.currentWarning, floodAreaWithWarning.long, floodAreaWithWarning.lat);
+            if(floodAreaWithWarning.currentWarning){
+                if (floodAreaWithWarning.currentWarning && floodAreaWithWarning.currentWarning.floodAreaGeoJson != undefined) {
+                    addSource(floodAreaWithWarning.notation, floodAreaWithWarning.currentWarning.floodAreaGeoJson);
+                }
+                addLayer(
+                    floodAreaWithWarning.notation + " line", "line",
+                    floodAreaWithWarning.notation,
+                    floodAreaWithWarning.currentWarning.severityLevel);
+                addLayer(
+                    floodAreaWithWarning.notation + " fill", "fill",
+                    floodAreaWithWarning.notation,
+                    floodAreaWithWarning.currentWarning.severityLevel);
+                addMarker(floodAreaWithWarning.currentWarning, floodAreaWithWarning.long, floodAreaWithWarning.lat);
+            }
         });
     }
 

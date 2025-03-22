@@ -11,6 +11,7 @@ const selectedFloodWarningDispatchContext = createContext((action: any) => {});
 export const SelectedFloodProvider = ({children}: any) => {
     const [state, dispatch] = useReducer(SelectedFloodReducer, {selectedWarning: undefined});
     return(
+        // @ts-ignore
         <selectedFloodWarningStateContext.Provider value={state}>
             <selectedFloodWarningDispatchContext.Provider value={dispatch}>
                 {children}
@@ -28,6 +29,10 @@ export const SelectedFloodReducer = (
         case "SELECT_WARNING":
             return {
                 selectedWarning: action.payload.newWarning
+            }
+        case "COLLAPSE_WARNING":
+            return {
+                selectedWarning: undefined
             }
     }
 }

@@ -94,20 +94,3 @@ export async function updateFloodAreaGeoJsons(currentFloodsMap: Map<string, Deta
         }
     });
 }
-
-/*
-export async function getFloodAreaGeoJsonForCurrentFloods(currentFloodsArray: FloodWarning[],
-                                                          allFloodAreas: Map<string, DetailedFloodArea>): Promise<void> {
-    currentFloodsArray.map(async (floodWarning: FloodWarning) => {
-        const floodWarningArea = allFloodAreas.get(floodWarning.floodAreaID);
-        floodWarning.floodAreaGeoJson = await getFloodAreaGeoJson(floodWarning.floodArea.polygon)
-            .then((geoJson) => {
-                return geoJson;
-            });
-        if(floodWarningArea){
-            floodWarning.detailedFloodArea = floodWarningArea;
-        }
-    });
-}
-
- */
