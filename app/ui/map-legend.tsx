@@ -7,11 +7,11 @@ export default function MapLegend() {
     const toggleOpen = () => {
         setIsOpen(!isOpen);
     };
-    const visibility = isOpen? "max-w-1/6 max-h-1/2 z-30 ml-auto mt-100 bg-amber-200 opacity-85 transition-all"
-        : "max-w-0 max-h-1/2 z-30 ml-auto mt-100 bg-amber-200 opacity-85 transition-all"
+    const visibility = isOpen? "max-w-1/6 max-h-1/2 z-30 ml-auto mt-100 bg-amber-200/65 opacity-85 transition-all"
+        : "max-w-0 max-h-1/2 z-30 ml-auto mt-100 bg-amber-200/65 opacity-85 transition-all"
     return(
         <div className="overflow-hidden">
-            <div className="float-right mt-5 cursor-pointer z-60 opacity-70 bg-gray-500">
+            <div className="float-right mt-5 cursor-pointer z-60 opacity-90 bg-gray-500/40">
                 <button className="cursor-pointer"
                         onClick={toggleOpen}>
                     <LegendIcon/>
