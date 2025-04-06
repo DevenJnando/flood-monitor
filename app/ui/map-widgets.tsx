@@ -4,7 +4,7 @@ import {Source} from "react-map-gl/mapbox";
 import {useStateContext} from "@/app/hooks/map-hook";
 import {useSelectedFloodWarningDispatchContext} from "@/app/hooks/selected-flood-hook";
 import {Fragment, Key} from "react";
-import Image from "next/image";
+import {SevereWarningMarker, WarningMarker, AlertMarker, NoLongerInForceMarker} from "@/app/ui/map-icons";
 import { GeoJSON, Geometry, GeoJsonProperties } from "geojson";
 
 export const Markers = () => {
@@ -29,28 +29,16 @@ export const Markers = () => {
                     latitude={marker.lat}
                     longitude={marker.long}>
                     {marker.severityLevel === 1 &&
-                        <Image src={"/flood-severe-warning-icon-960.webp"}
-                               width={60}
-                               height={60}
-                               alt={"Severe Flood Warning Marker"}/>
+                        <SevereWarningMarker/>
                     }
                     {marker.severityLevel === 2 &&
-                        <Image src={"/flood-warning-icon-960.png"}
-                               width={60}
-                               height={60}
-                               alt={"Flood Warning Marker"}/>
+                        <WarningMarker/>
                     }
                     {marker.severityLevel === 3 &&
-                        <Image src={"/flood-alert-icon-960.png"}
-                               width={60}
-                               height={60}
-                               alt={"Flood Alert Marker"}/>
+                        <AlertMarker/>
                     }
                     {marker.severityLevel === 4 &&
-                        <Image src={"/info-icon-512x512-yqsopuso.png"}
-                               width={30}
-                               height={30}
-                               alt={"Flood Warning No Longer in Force Marker"}/>
+                        <NoLongerInForceMarker/>
                     }
                 </Marker>
             ))}

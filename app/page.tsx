@@ -25,15 +25,15 @@ await updateFloodAreaGeoJsons(currentFloodsMap, currentFloodsArray)
 export default function Home() {
 
     return (
-        <div className="grid grid-rows-[10px_1fr_10px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+        <div className="font-[family-name:var(--font-geist-sans)]">
           <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start content-evenly">
-              <div className="flex flex-col">
-                  <p>this uses Environment Agency flood and river level data from the real-time data API (Beta)</p>
-              </div>
               <MapProvider>
                   <SelectedFloodProvider>
                       <div className="flex flex-col relative">
-                      <SelectedFlood/>
+                          <SelectedFlood/>
+                          <aside className="fixed top-0 right-0 z-40">
+                              <p className="text-black">this uses Environment Agency flood and river level data from the real-time data API (Beta)</p>
+                          </aside>
                           <FloodMap
                               currentFloodsMap={currentFloodsMap}
                           />
@@ -41,8 +41,6 @@ export default function Home() {
                   </SelectedFloodProvider>
               </MapProvider>
           </main>
-          <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-          </footer>
         </div>
     );
 }

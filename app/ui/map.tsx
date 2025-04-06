@@ -4,13 +4,16 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import * as React from "react";
 import {DetailedFloodAreaWithWarning, FloodWarning} from "@/app/services/flood-api-interfaces";
 import {useDispatchContext} from "@/app/hooks/map-hook";
+import {useWindowSize} from "@/app/hooks/utility-functions-hook"
 import {Layers, Markers, Sources} from "@/app/ui/map-widgets";
 import {GeoJSON} from "geojson";
+import MapLegend from "@/app/ui/map-legend";
 
 
 export default function FloodMap({currentFloodsMap}: {
     currentFloodsMap: Map<string, DetailedFloodAreaWithWarning>;
 }) {
+    const screenSize = useWindowSize();
     const dispatchContext = useDispatchContext();
     const [viewState, setViewState] = React.useState({
         longitude: -1.47663,
@@ -119,21 +122,23 @@ export default function FloodMap({currentFloodsMap}: {
         });
     }
 
-   return( <div className="flex w-full items-center justify-between">
-               <Map
-                   {...viewState}
-                   onMove={e =>setViewState(e.viewState)}
-                   style={{width: 800, height: 600}}
-                   mapStyle={"https://api.maptiler.com/maps/streets/style.json?key=U2udwPDvVDDdAolS5wws"}
-                   mapboxAccessToken="pk.eyJ1IjoiY3JlbmFuZDAiLCJhIjoiY204MXRlY3lsMG1tcjJscXJzdThhMnRnbiJ9.MyrIyAKS0lnO1CP12NCguA"
-                   onLoad={(e) => {
-                       populateMap();
-                   }}
-                >
-                   <Markers />
-                   <Sources />
-                   <Layers />
-               </Map>
-            </div>
+   return(
+       <div className="flex w-full items-center justify-between">
+           <Map
+               {...viewState}
+               onMove={e =>setViewState(e.viewState)}
+               style={{width: screenSize.width, height: screenSize.height}}
+               mapStyle={"https://api.maptiler.com/maps/streets/style.json?key=U2udwPDvVDDdAolS5wws"}
+               mapboxAccessToken="pk.eyJ1IjoiY3JlbmFuZDAiLCJhIjoiY204MXRlY3lsMG1tcjJscXJzdThhMnRnbiJ9.MyrIyAKS0lnO1CP12NCguA"
+               onLoad={(e) => {
+                   populateMap();
+               }}
+            >
+               <Markers />
+               <Sources />
+               <Layers />
+               <MapLegend/>
+           </Map>
+       </div>
    );
 }
