@@ -1,13 +1,13 @@
 'use client'
 import {Map} from "react-map-gl/mapbox";
 import 'mapbox-gl/dist/mapbox-gl.css';
-import * as React from "react";
 import {DetailedFloodAreaWithWarning, FloodWarning} from "@/app/services/flood-api-interfaces";
 import {useDispatchContext} from "@/app/hooks/map-hook";
 import {useWindowSize} from "@/app/hooks/utility-functions-hook"
 import {Layers, Markers, Sources} from "@/app/ui/map-widgets";
 import {GeoJSON} from "geojson";
 import MapLegend from "@/app/ui/map-legend";
+import {useEffect, useState} from "react";
 
 
 export default function FloodMap({currentFloodsMap}: {
@@ -15,10 +15,22 @@ export default function FloodMap({currentFloodsMap}: {
 }) {
     const screenSize = useWindowSize();
     const dispatchContext = useDispatchContext();
-    const [viewState, setViewState] = React.useState({
+    const [viewState, setViewState] = useState({
         longitude: -1.47663,
         latitude: 52.92277,
         zoom: 6
+    });
+
+    useEffect(() => {
+        const latestTimer = setTimeout(() => {
+            if(viewState.zoom >= 12) {
+                dispatchContext({type: "SHOW_LAYERS"});
+            } else {
+                dispatchContext({type: "HIDE_LAYERS"});
+            }
+        }, 200);
+
+        return () => clearTimeout(latestTimer);
     });
 
     function addSource(id: string, data: GeoJSON) {
@@ -83,6 +95,7 @@ export default function FloodMap({currentFloodsMap}: {
                         type: type,
                         source: source,
                         paint: paint,
+                        layout: {visibility: "none"},
                         severityLevel: severityLevel
                     }
             }

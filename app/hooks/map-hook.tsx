@@ -1,17 +1,18 @@
 'use client'
+import {MarkerType, LayerType, SourceType} from "@/app/ui/map-interfaces"
 import {useReducer, createContext} from "react";
-import {LayerProps} from "react-map-gl/mapbox";
 import {Feature, FeatureCollection} from "geojson";
 import {FloodWarning} from "@/app/services/flood-api-interfaces";
 import {useContextWrapper} from "@/app/hooks/context-wrapper";
+import {layerIsVisible} from "@/app/hooks/utility-functions-hook";
 
 const mapStateContext = createContext({
     markers: [{long: 0, lat: 0, severityLevel: 0}],
-    layers: [{id: '', type: '', source: '', paint: {}, severityLevel: 0}],
+    layers: [{id: '', type: '', source: '', paint: {}, layout: {}, severityLevel: 0}],
     sources: [{id: '', data: {}}]
 });
-const mapDispatchContext = createContext((action: any) => {});
 
+const mapDispatchContext = createContext((action: any) => {});
 
 export const MapProvider = ({children}: any) => {
     const [state, dispatch] = useReducer(MapReducer, {markers: [], layers: [], sources: []});
@@ -27,9 +28,9 @@ export const MapProvider = ({children}: any) => {
 export const MapReducer = (
     state:
     {
-        markers: ({} | undefined)[],
-        layers: ({} | undefined)[],
-        sources: ({} | undefined)[]
+        markers: (MarkerType | undefined)[],
+        layers: (LayerType | undefined)[],
+        sources: (SourceType | undefined)[]
     },
     action:
     { type: string, payload:
@@ -45,9 +46,10 @@ export const MapReducer = (
                 layer?:
                     {
                         id: string,
-                        type: LayerProps["type"],
+                        type: string,
                         source: string,
-                        paint: {},
+                        paint: object,
+                        layout: object,
                         severityLevel: number
                     }
                     | undefined
@@ -73,6 +75,22 @@ export const MapReducer = (
             return {
                 ...state,
                 sources: [...state.sources, action.payload.source]
+            }
+        case "SHOW_LAYERS":
+            state.layers = state.layers.map(layer => {
+                return layerIsVisible(layer, true)
+            });
+            return {
+                ...state,
+                layers: [...state.layers]
+            }
+        case "HIDE_LAYERS":
+            state.layers = state.layers.map(layer => {
+                return layerIsVisible(layer, false)
+            });
+            return {
+                ...state,
+                layers: [...state.layers]
             }
         default:
     }
