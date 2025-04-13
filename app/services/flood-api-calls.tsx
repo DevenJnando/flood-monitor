@@ -3,9 +3,16 @@ import {
     DetailedFloodArea,
     DetailedFloodAreaWithWarning,
     FloodArea,
-    FloodWarning
+    FloodWarning,
+    Measure,
+    MonitoringStation,
+    WaterLevelReading
 } from "@/app/services/flood-api-interfaces";
 import {GeoJSON} from "geojson";
+import {
+    addStationToMeasureLookup,
+    getStationToMeasureLookupTable
+} from "@/app/lookup-tables/station-to-measure-lookup-table";
 
 
 export async function getCurrentFloods(): Promise<FloodWarning[]> {
@@ -21,6 +28,38 @@ export async function getCurrentFloods(): Promise<FloodWarning[]> {
             currentFloodWarningsArray.push(floodWarning);
         }));
     return currentFloodWarningsArray;
+}
+
+export async function getLatestReadings(): Promise<WaterLevelReading[]> {
+    const latestReadings: WaterLevelReading[] = [];
+    await fetch('https://environment.data.gov.uk/flood-monitoring/data/readings?latest')
+        .catch((error: Error) => {
+            console.error("API fetch error...");
+            throw new Error("Failed to fetch latest readings from API call...\n"
+            + error.message);
+        })
+        .then(res => res.json())
+        .then(data => data.items.forEach(async (reading: WaterLevelReading) => {
+            latestReadings.push(reading);
+        }));
+    return latestReadings;
+}
+
+export async function getAllMonitoringStations(): Promise<MonitoringStation[]> {
+    const stations: MonitoringStation[] = [];
+    await fetch('https://environment.data.gov.uk/flood-monitoring/id/stations')
+        .catch((error: Error) => {
+            console.error("API fetch error...");
+            throw new Error("Failed to fetch stations from API call...\n"
+                + error.message);
+        })
+        .then(res => res.json())
+        .then(data => data.items.forEach(async (station: MonitoringStation) => {
+            if(typeof station.label === "string"){
+                stations.push(station);
+            }
+        }));
+    return stations;
 }
 
 export async function getAllFloodAreas(): Promise<Map<string, DetailedFloodArea>> {

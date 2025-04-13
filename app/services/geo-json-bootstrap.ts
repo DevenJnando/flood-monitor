@@ -46,6 +46,11 @@ export function generateStationGeoJSON(monitoringStations: MonitoringStation[]) 
         if(typeof station.long === "number" && typeof station.lat === "number" && stationGeoJSONFeature.geometry.type === "Point"){
             stationGeoJSONFeature.geometry.coordinates = [station.long, station.lat];
             stationGeoJSONFeature.properties? stationGeoJSONFeature.properties.id = station.notation : null;
+            if(station.measures){
+                if(station.measures.length != 0) {
+                    stationGeoJSONFeature.properties? stationGeoJSONFeature.properties.type = station.measures[0].qualifier : null;
+                }
+            }
         }
         return stationGeoJSONFeature;
     });

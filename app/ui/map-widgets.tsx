@@ -1,6 +1,4 @@
-import {Marker} from "react-map-gl/mapbox";
-import {Layer} from "react-map-gl/mapbox";
-import {Source} from "react-map-gl/mapbox";
+import {Marker, Layer, Source} from "react-map-gl/mapbox";
 import {MarkerType, LayerType, SourceType} from "@/app/ui/map-interfaces"
 import {useStateContext} from "@/app/hooks/map-hook";
 import {useSelectedFloodWarningDispatchContext} from "@/app/hooks/selected-flood-hook";
@@ -55,6 +53,7 @@ export const Layers = () => {
                         source={layer.source}
                         layout={layer.layout}
                         paint={layer.paint}
+                        filter={layer.filter}
                     >
                     </Layer>
                 </Fragment>

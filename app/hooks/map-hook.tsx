@@ -4,7 +4,7 @@ import {useReducer, createContext} from "react";
 import {Feature, FeatureCollection} from "geojson";
 import {FloodWarning} from "@/app/services/flood-api-interfaces";
 import {useContextWrapper} from "@/app/hooks/context-wrapper";
-import {layerIsVisible} from "@/app/hooks/utility-functions-hook";
+import {LayoutSpecification, PaintSpecification} from "mapbox-gl";
 
 const mapStateContext = createContext({
     markers: [{long: 0, lat: 0, severityLevel: 0}],
@@ -40,7 +40,7 @@ export const MapReducer = (
                         warning?: FloodWarning,
                         long: number,
                         lat: number,
-                        severityLevel: number
+                        severityLevel?: number
                     }
                 | undefined,
                 layer?:
@@ -48,9 +48,10 @@ export const MapReducer = (
                         id: string,
                         type: string,
                         source: string,
-                        paint: object,
-                        layout: object,
-                        severityLevel: number
+                        paint?: PaintSpecification,
+                        layout?: LayoutSpecification,
+                        filter?: Array<string>,
+                        severityLevel?: number
                     }
                     | undefined
                 source?:
@@ -75,22 +76,6 @@ export const MapReducer = (
             return {
                 ...state,
                 sources: [...state.sources, action.payload.source]
-            }
-        case "SHOW_LAYERS":
-            state.layers = state.layers.map(layer => {
-                return layerIsVisible(layer, true)
-            });
-            return {
-                ...state,
-                layers: [...state.layers]
-            }
-        case "HIDE_LAYERS":
-            state.layers = state.layers.map(layer => {
-                return layerIsVisible(layer, false)
-            });
-            return {
-                ...state,
-                layers: [...state.layers]
             }
         default:
     }

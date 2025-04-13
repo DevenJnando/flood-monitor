@@ -55,3 +55,38 @@ export interface FloodWarning {
     "timeRaised": string;
     "timeSeverityChanged": string;
 }
+
+export interface Measure {
+    "@id": string;
+    "parameterName": string;
+    "period": number;
+    "qualifier": string;
+    "unitName": string;
+}
+
+export interface MonitoringStation {
+    "@id": string;
+    "RLOIid": string;
+    "catchmentName": string;
+    "dateOpened": string;
+    "easting": number;
+    "label": string | string[];
+    "lat": number | number[];
+    "long": number | number[];
+    "measures": Measure[];
+    "northing": number;
+    "notation": string;
+    "riverName": string;
+    "stageScale": string;
+    "stationReference": string;
+    "status": string;
+    "town": string;
+    "wiskiID": string;
+}
+
+export interface WaterLevelReading {
+    "@id": string;
+    "dateTime": string;
+    "measure": string;
+    "value": number;
+}

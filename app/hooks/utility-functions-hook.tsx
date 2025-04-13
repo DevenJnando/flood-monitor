@@ -1,15 +1,4 @@
 import {useEffect, useState} from "react";
-import {LayerType} from "@/app/ui/map-interfaces";
-
-export function layerIsVisible(layer: LayerType | undefined, isVisible: boolean) {
-    if(layer){
-        if(Object.hasOwn(layer, "layout")) {
-            // @ts-ignore
-            layer["layout"] = isVisible? {visibility: "visible"} : {visibility: "none"};
-            return layer;
-        }
-    }
-}
 
 export function useWindowSize() {
     const [windowSize, setWindowSize] = useState({
