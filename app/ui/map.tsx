@@ -23,7 +23,9 @@ function loadMapImage(mapRef: MapRef, imageName: string, link: string) {
         (error, image) => {
         if (error) {throw error};
         if(image) {
-            mapRef.addImage(imageName, image);
+            mapRef.addImage(imageName, image, {
+                'pixelRatio': 6
+            });
         }
     })
 }
