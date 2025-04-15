@@ -1,5 +1,4 @@
-import {getMeasureById} from "@/app/lookup-tables/station-to-measure-lookup-table";
-import {LayoutSpecification, PaintSpecification} from "mapbox-gl";
+import {ExpressionSpecification, LayoutSpecification, PaintSpecification} from "mapbox-gl";
 import {MapRef} from "react-map-gl/mapbox";
 import {MeasureType} from "@/app/map-styling/layer-enums";
 
@@ -17,6 +16,14 @@ export function floodLayersAreVisible(mapRef: MapRef, isVisible: boolean, floodI
             });
         }
     }
+}
+
+export function setLayerFilter(mapRef: MapRef, layerId: string, propertyId: string) {
+    mapRef.getMap().setFilter(layerId, [
+        "in",
+        "id",
+        propertyId
+    ]);
 }
 
 export function monitoringStationLayersAreVisible(mapRef: MapRef, isVisible: boolean, monitoringStationIds: Array<string>) {
@@ -60,6 +67,19 @@ export function generateStationLayer(stationType: string, type: string) {
     return generateLayer(type, modifier, undefined, stationType);
 }
 
+function iconSizeOnZoom() {
+    const expression: ExpressionSpecification = [
+        "interpolate",
+        ["exponential", 1.5],
+        ["zoom"],
+        5,
+        0.33,
+        18,
+        3
+    ];
+    return expression;
+}
+
 function generateLayer(type: string, modifier?: number, color?: string, image?: string): {} {
     const paintSpec: PaintSpecification = {};
     const layoutSpec: LayoutSpecification = {};
@@ -75,6 +95,8 @@ function generateLayer(type: string, modifier?: number, color?: string, image?: 
         case "symbol":
             layoutSpec["icon-image"] = image;
             layoutSpec["icon-size"] = modifier;
+            layoutSpec["icon-allow-overlap"] = true;
+            layoutSpec["icon-size"] = iconSizeOnZoom();
             layoutSpec.visibility = "visible";
             return layoutSpec;
         default:

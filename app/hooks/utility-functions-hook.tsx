@@ -1,5 +1,9 @@
 import {useEffect, useState} from "react";
 
+export function getHostName() {
+    return window.location.hostname;
+}
+
 export function useWindowSize() {
     const [windowSize, setWindowSize] = useState({
         width: 0,
