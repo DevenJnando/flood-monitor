@@ -4,15 +4,10 @@ import {
     DetailedFloodAreaWithWarning,
     FloodArea,
     FloodWarning,
-    Measure,
     MonitoringStation,
     WaterLevelReading
 } from "@/app/services/flood-api-interfaces";
 import {GeoJSON} from "geojson";
-import {
-    addStationToMeasureLookup,
-    getStationToMeasureLookupTable
-} from "@/app/lookup-tables/station-to-measure-lookup-table";
 
 
 export async function getCurrentFloods(): Promise<FloodWarning[]> {
@@ -91,7 +86,7 @@ export async function getSpecificFloodArea(floodAreaId: string): Promise<Detaile
 export async function getDetailedFloodAreasWithWarnings() {
     return getCurrentFloods()
         .then((floodWarnings) =>{
-            let promises = floodWarnings.map((floodWarning)=> {
+            const promises = floodWarnings.map((floodWarning)=> {
                 return getSpecificFloodArea(floodWarning.floodAreaID);
             });
             return Promise.all(promises);
@@ -109,7 +104,7 @@ export async function getFloodAreaGeoJson(floodAreaPolygon: string): Promise<Geo
 }
 
 export async function getAllFloodAreaGeoJsons(floodAreas: FloodArea[]) {
-    let promises = floodAreas.map((floodArea)=> {
+    const promises = floodAreas.map((floodArea)=> {
         return getFloodAreaGeoJson(floodArea.polygon);
     });
     return Promise.all(promises);

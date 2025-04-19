@@ -32,7 +32,9 @@ export function generateFloodAreaGeoJSON(floodAreas: DetailedFloodAreaWithWarnin
                 const floodAreaFeatures = floodAreaWithWarning.currentWarning.floodAreaGeoJson.features;
                 feature.geometry = floodAreaFeatures[0].geometry;
                 feature.properties = floodAreaFeatures[0].properties;
-                feature.properties? feature.properties.id = floodAreaWithWarning.notation : null;
+                if (feature.properties){
+                    feature.properties.id = floodAreaWithWarning.notation;
+                }
             }
         }
         return feature;
@@ -45,10 +47,14 @@ export function generateStationGeoJSON(monitoringStations: MonitoringStation[]) 
         const stationGeoJSONFeature: Feature = defaultFeature()
         if(typeof station.long === "number" && typeof station.lat === "number" && stationGeoJSONFeature.geometry.type === "Point"){
             stationGeoJSONFeature.geometry.coordinates = [station.long, station.lat];
-            stationGeoJSONFeature.properties? stationGeoJSONFeature.properties.id = station.notation : null;
+            if (stationGeoJSONFeature.properties) {
+                stationGeoJSONFeature.properties.id = station.notation;
+            }
             if(station.measures){
                 if(station.measures.length != 0) {
-                    stationGeoJSONFeature.properties? stationGeoJSONFeature.properties.type = station.measures[0].qualifier : null;
+                    if (stationGeoJSONFeature.properties){
+                        stationGeoJSONFeature.properties.type = station.measures[0].qualifier;
+                    }
                 }
             }
         }

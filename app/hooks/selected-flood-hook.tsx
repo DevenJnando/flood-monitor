@@ -1,17 +1,26 @@
 'use client'
-import {createContext, useReducer} from "react";
+import {createContext, PropsWithChildren, useReducer} from "react";
 import {FloodWarning} from "@/app/services/flood-api-interfaces";
-import {useContextWrapper} from "@/app/hooks/context-wrapper";
+import {
+    useSelectedFloodWarningDispatchContextWrapper,
+    useSelectedFloodWarningStateContextWrapper
+} from "@/app/hooks/context-wrapper";
+import {SelectedFloodWarningAction, SelectedFloodWarningState} from "@/app/hooks/states-and-actions";
+
+const defaultState: SelectedFloodWarningState = {
+    selectedWarning: undefined
+}
+
+const selectedFloodWarningStateContext = createContext(defaultState);
+const selectedFloodWarningDispatchContext = createContext(
+    (action: SelectedFloodWarningAction) => {
+        action.type = "DEFAULT_ACTION";
+    });
 
 
-const selectedFloodWarningStateContext = createContext({selectedWarning: undefined});
-const selectedFloodWarningDispatchContext = createContext((action: any) => {});
-
-
-export const SelectedFloodProvider = ({children}: any) => {
+export const SelectedFloodProvider = ({children}: PropsWithChildren) => {
     const [state, dispatch] = useReducer(SelectedFloodReducer, {selectedWarning: undefined});
     return(
-        // @ts-ignore
         <selectedFloodWarningStateContext.Provider value={state}>
             <selectedFloodWarningDispatchContext.Provider value={dispatch}>
                 {children}
@@ -21,7 +30,7 @@ export const SelectedFloodProvider = ({children}: any) => {
 }
 
 export const SelectedFloodReducer = (
-    state:{selectedWarning: (FloodWarning | undefined)} | undefined,
+    state:{selectedWarning: (FloodWarning | undefined)},
     action:{type: string, payload:{
             newWarning: (FloodWarning | undefined);
         }}) => {
@@ -35,12 +44,13 @@ export const SelectedFloodReducer = (
                 selectedWarning: undefined
             }
     }
+    return state;
 }
 
 export const useSelectedFloodWarningStateContext = () => {
-    return useContextWrapper(selectedFloodWarningStateContext);
+    return useSelectedFloodWarningStateContextWrapper(selectedFloodWarningStateContext);
 }
 
 export const useSelectedFloodWarningDispatchContext = () => {
-    return useContextWrapper(selectedFloodWarningDispatchContext);
+    return useSelectedFloodWarningDispatchContextWrapper(selectedFloodWarningDispatchContext);
 }

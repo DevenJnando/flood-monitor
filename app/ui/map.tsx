@@ -18,7 +18,7 @@ import {
 import {Layers, Markers, Sources} from "@/app/ui/map-widgets";
 import MapLegend from "@/app/ui/map-legend";
 import {useEffect, useRef, useState} from "react";
-import {GeoJSON} from "geojson";
+import {Feature, FeatureCollection} from "geojson";
 import {MapRef} from "react-map-gl/mapbox";
 import {LayoutSpecification, PointLike} from "mapbox-gl";
 import {MeasureType} from "@/app/map-styling/layer-enums";
@@ -67,7 +67,7 @@ export default function FloodMap({currentFloodsMap, monitoringStations}: {
     const mapRef = useRef<MapRef>(null);
     const [selectedMonitoringStationIds, setSelectedMonitoringStationIds] = useState<string[]>(new Array<string>());
     const [floodLayerIds, setFloodLayerIds] = useState<string[]>(new Array<string>());
-    const [monitoringStationIds, setMonitoringStationIds] = useState<string[]>(new Array<string>());
+    const [, setMonitoringStationIds] = useState<string[]>(new Array<string>());
     const [viewState, setViewState] = useState({
         longitude: -1.47663,
         latitude: 52.92277,
@@ -90,7 +90,7 @@ export default function FloodMap({currentFloodsMap, monitoringStations}: {
         return () => clearTimeout(latestTimer);
     });
 
-    function addSource(id: string, data: GeoJSON) {
+    function addSource(id: string, data: FeatureCollection | Feature) {
         dispatchContext({type: "ADD_SOURCE",
             payload:{
                 source:
@@ -211,31 +211,11 @@ export default function FloodMap({currentFloodsMap, monitoringStations}: {
                 addMarker(floodAreaWithWarning.long, floodAreaWithWarning.lat, floodAreaWithWarning.currentWarning);
             }
         });
-        const station = monitoringStations[0];
-        //monitoringStations.map((station: MonitoringStation) => {
-
         addMonitoringStationLayer(MeasureType.UPSTREAM_STAGE, "symbol", "monitoring-stations", "#5074d2");
         addMonitoringStationLayer(MeasureType.DOWNSTEAM_STAGE, "symbol", "monitoring-stations", "#5074d2");
         addMonitoringStationLayer(MeasureType.RAINFALL, "symbol", "monitoring-stations", "#213fec");
-        addMonitoringStationLayer(MeasureType.TIDAL_LEVEL, "symbol", "monitoring-stations", "#03af6f");
+        addMonitoringStationLayer(MeasureType.TIDAL_LEVEL, "symbol", "monitoring-stations", "#bb6c04");
         addMonitoringStationLayer(MeasureType.GROUNDWATER, "symbol", "monitoring-stations", "#020202");
-        //});
-        /*
-        monitoringStations.map((station) => {
-            if(station.long && station.lat){
-                if(typeof station.long == "number" && typeof station.lat == "number") {
-                    addMarker(station.long, station.lat);
-                } else {
-                    for(let i = 0; typeof station.long !== "number" && i < station.long?.length; i++) {
-                        if(typeof station.lat !== "number"){
-                            addMarker(station.long[i], station.lat[i]);
-                        }
-                    }
-                }
-            }
-        })
-
-         */
     }
 
    return(
@@ -247,7 +227,7 @@ export default function FloodMap({currentFloodsMap, monitoringStations}: {
                mapStyle={"https://api.maptiler.com/maps/streets/style.json?key=U2udwPDvVDDdAolS5wws"}
                mapboxAccessToken="pk.eyJ1IjoiY3JlbmFuZDAiLCJhIjoiY204MXRlY3lsMG1tcjJscXJzdThhMnRnbiJ9.MyrIyAKS0lnO1CP12NCguA"
                ref={mapRef}
-               onLoad={(e) => {
+               onLoad={() => {
                    if(mapRef.current){
                        // REMEMBER to fix this! This is temporary just so the images load in development.
                        loadMapImage(mapRef.current, MeasureType.UPSTREAM_STAGE,

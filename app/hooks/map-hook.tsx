@@ -1,20 +1,20 @@
 'use client'
-import {MarkerType, LayerType, SourceType} from "@/app/ui/map-interfaces"
-import {useReducer, createContext} from "react";
-import {Feature, FeatureCollection} from "geojson";
-import {FloodWarning} from "@/app/services/flood-api-interfaces";
-import {useContextWrapper} from "@/app/hooks/context-wrapper";
-import {LayoutSpecification, PaintSpecification} from "mapbox-gl";
+import {useReducer, createContext, PropsWithChildren} from "react";
+import {useMapDispatchContextWrapper, useMapStateContextWrapper} from "@/app/hooks/context-wrapper";
+import {MapAction, MapState} from "@/app/hooks/states-and-actions";
 
-const mapStateContext = createContext({
+const defaultState: MapState = {
     markers: [{long: 0, lat: 0, severityLevel: 0}],
     layers: [{id: '', type: '', source: '', paint: {}, layout: {}, severityLevel: 0}],
-    sources: [{id: '', data: {}}]
+    sources: [{id: '', data: undefined}]
+}
+const mapStateContext = createContext(defaultState);
+
+const mapDispatchContext = createContext((action: MapAction) => {
+    action.type = "DEFAULT_ACTION";
 });
 
-const mapDispatchContext = createContext((action: any) => {});
-
-export const MapProvider = ({children}: any) => {
+export const MapProvider = ({children}: PropsWithChildren) => {
     const [state, dispatch] = useReducer(MapReducer, {markers: [], layers: [], sources: []});
     return (
         <mapStateContext.Provider value={state}>
@@ -26,41 +26,8 @@ export const MapProvider = ({children}: any) => {
 }
 
 export const MapReducer = (
-    state:
-    {
-        markers: (MarkerType | undefined)[],
-        layers: (LayerType | undefined)[],
-        sources: (SourceType | undefined)[]
-    },
-    action:
-    { type: string, payload:
-            {
-                marker?:
-                    {
-                        warning?: FloodWarning,
-                        long: number,
-                        lat: number,
-                        severityLevel?: number
-                    }
-                | undefined,
-                layer?:
-                    {
-                        id: string,
-                        type: string,
-                        source: string,
-                        paint?: PaintSpecification,
-                        layout?: LayoutSpecification,
-                        filter?: Array<string>,
-                        severityLevel?: number
-                    }
-                    | undefined
-                source?:
-                    {
-                        id: string,
-                        data: FeatureCollection | Feature
-                    }
-            }
-    }) => {
+    state: MapState,
+    action: MapAction) => {
     switch (action.type) {
         case "ADD_MARKER":
             return {
@@ -84,9 +51,9 @@ export const MapReducer = (
 
 
 export const useStateContext = () => {
-    return useContextWrapper(mapStateContext);
+    return useMapStateContextWrapper(mapStateContext);
 }
 
 export const useDispatchContext = () => {
-    return useContextWrapper(mapDispatchContext);
+    return useMapDispatchContextWrapper(mapDispatchContext);
 }

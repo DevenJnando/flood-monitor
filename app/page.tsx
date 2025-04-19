@@ -6,7 +6,7 @@ import {
     updateFloodAreaGeoJsons
 } from "@/app/services/flood-api-calls";
 import {
-    DetailedFloodAreaWithWarning, Measure, MonitoringStation
+    DetailedFloodAreaWithWarning, MonitoringStation
 } from "@/app/services/flood-api-interfaces";
 import {MapProvider} from "@/app/hooks/map-hook";
 import SelectedFlood from "@/app/ui/selected-flood";

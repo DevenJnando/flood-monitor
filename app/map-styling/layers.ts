@@ -63,7 +63,9 @@ export function generateFloodPlaneLayer(type: string, severityLevel: number) {
 
 export function generateStationLayer(stationType: string, type: string) {
     const modifier = type === "symbol" ? 0.25 : undefined;
-    stationType === MeasureType.DOWNSTEAM_STAGE? stationType = MeasureType.UPSTREAM_STAGE : stationType;
+    if (stationType === MeasureType.DOWNSTEAM_STAGE) {
+        stationType = MeasureType.UPSTREAM_STAGE;
+    }
     return generateLayer(type, modifier, undefined, stationType);
 }
 
@@ -80,7 +82,7 @@ function iconSizeOnZoom() {
     return expression;
 }
 
-function generateLayer(type: string, modifier?: number, color?: string, image?: string): {} {
+function generateLayer(type: string, modifier?: number, color?: string, image?: string): object {
     const paintSpec: PaintSpecification = {};
     const layoutSpec: LayoutSpecification = {};
     switch (type) {

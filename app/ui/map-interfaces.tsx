@@ -1,9 +1,10 @@
 'use server';
 import {GeoJSON} from "geojson";
 import {LayoutSpecification, PaintSpecification} from "mapbox-gl";
+import {FloodWarning} from "@/app/services/flood-api-interfaces";
 
 export interface MarkerType {
-    warning?: any,
+    warning?: FloodWarning,
     long: number,
     lat: number,
     severityLevel?: number
