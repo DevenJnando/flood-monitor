@@ -10,8 +10,8 @@ export interface SelectedFloodWarningState {
 export interface SelectedFloodWarningAction {
     type: string,
     payload: {
-        newWarning: (FloodWarning | undefined);
-    }
+        newWarning: (FloodWarning)
+    } | undefined;
 }
 
 export interface MapState {

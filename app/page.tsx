@@ -15,11 +15,13 @@ import {addStationToMeasureLookup} from "@/app/lookup-tables/station-to-measure-
 
 
 const currentFloodsMap: Map<string, DetailedFloodAreaWithWarning> = new Map<string, DetailedFloodAreaWithWarning>();
-const currentFloodsArray: DetailedFloodAreaWithWarning[] = await getDetailedFloodAreasWithWarnings().then((floodWarnings) =>{
+const currentFloodsArray: (DetailedFloodAreaWithWarning | null)[] = await getDetailedFloodAreasWithWarnings().then((floodWarnings) =>{
     return floodWarnings;
 });
 currentFloodsArray.map((floodAreaWithWarning) => {
-    currentFloodsMap.set(floodAreaWithWarning.notation, floodAreaWithWarning);
+    if(floodAreaWithWarning) {
+        currentFloodsMap.set(floodAreaWithWarning.notation, floodAreaWithWarning);
+    }
 })
 await updateFloodAreaGeoJsons(currentFloodsMap, currentFloodsArray);
 
@@ -35,8 +37,8 @@ monitoringStations.forEach((station: MonitoringStation) => {
 export default function Home() {
 
     return (
-        <div className="font-[family-name:var(--font-geist-sans)]">
-          <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start content-evenly">
+        <div id="app" className="font-[family-name:var(--font-geist-sans)]" data-cy="app">
+          <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start content-evenly" data-cy="main-body">
               <MapProvider>
                   <SelectedFloodProvider>
                       <div className="flex flex-col relative">

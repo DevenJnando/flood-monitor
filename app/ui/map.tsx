@@ -219,7 +219,7 @@ export default function FloodMap({currentFloodsMap, monitoringStations}: {
     }
 
    return(
-       <div className="flex w-full items-center justify-between">
+       <div className="flex w-full items-center justify-between" data-cy="flood-map">
            <Map
                {...viewState}
                onMove={e =>setViewState(e.viewState)}

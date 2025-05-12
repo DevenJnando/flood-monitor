@@ -13,11 +13,11 @@ export default function SelectedFlood() {
         const timeMessageChangedAsDate = new Date(selectedWarning.timeMessageChanged).toUTCString();
         return(
             <aside className="fixed top-0 left-0 z-40 max-w-1/3 h-screen transition-transform -translate-x-full sm:translate-x-0"
-                   aria-label="Sidebar">
-                <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-blue-900">
+                   aria-label="Sidebar" data-cy="selected-flood-sidebar">
+                <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-blue-900" data-cy="selected-flood">
                     <button className="cursor-pointer rounded-full bg-gray-700"
                     onClick={() => {
-                        selectedFloodDispatchContext({type: "COLLAPSE_WARNING"})
+                        selectedFloodDispatchContext({type: "COLLAPSE_WARNING", payload: undefined})
                     }}>
                         <Image src="/arrow.png"
                                alt="Collapse Flood Dialog"

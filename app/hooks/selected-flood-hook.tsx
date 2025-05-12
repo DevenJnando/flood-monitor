@@ -30,14 +30,12 @@ export const SelectedFloodProvider = ({children}: PropsWithChildren) => {
 }
 
 export const SelectedFloodReducer = (
-    state:{selectedWarning: (FloodWarning | undefined)},
-    action:{type: string, payload:{
-            newWarning: (FloodWarning | undefined);
-        }}) => {
+    state:SelectedFloodWarningState,
+    action:SelectedFloodWarningAction) => {
     switch(action.type) {
         case "SELECT_WARNING":
             return {
-                selectedWarning: action.payload.newWarning
+                selectedWarning: action.payload?.newWarning
             }
         case "COLLAPSE_WARNING":
             return {
