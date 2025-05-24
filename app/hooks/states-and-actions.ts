@@ -1,7 +1,8 @@
-import {FloodWarning} from "@/app/services/flood-api-interfaces";
+import {FloodWarning, MonitoringStation} from "@/app/services/flood-api-interfaces";
 import {LayoutSpecification, PaintSpecification} from "mapbox-gl";
 import {Feature, FeatureCollection} from "geojson";
-import {LayerType, MarkerType, SourceType} from "@/app/ui/map-interfaces";
+import {LayerType, MarkerType, SourceType} from "@/app/ui/map/map-interfaces";
+import {ToastData, ToastType} from "@/app/ui/toast/toast-interface";
 
 export interface SelectedFloodWarningState {
     selectedWarning: FloodWarning | undefined;
@@ -11,6 +12,28 @@ export interface SelectedFloodWarningAction {
     type: string,
     payload: {
         newWarning: (FloodWarning | undefined);
+    }
+}
+
+export interface SelectedMonitoringStationState {
+    selectedStation: MonitoringStation | undefined;
+}
+
+export interface SelectedMonitoringStationAction {
+    type: string,
+    payload: {
+        newStation: (MonitoringStation | undefined);
+    }
+}
+
+export interface toastState {
+    toastData: ToastData | undefined;
+}
+
+export interface toastAction {
+    type: string,
+    payload: {
+        toast: ToastData
     }
 }
 

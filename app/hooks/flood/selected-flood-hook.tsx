@@ -2,9 +2,9 @@
 import {createContext, PropsWithChildren, useReducer} from "react";
 import {FloodWarning} from "@/app/services/flood-api-interfaces";
 import {
-    useSelectedFloodWarningDispatchContextWrapper,
-    useSelectedFloodWarningStateContextWrapper
-} from "@/app/hooks/context-wrapper";
+    selFloodWarnDispCtxtWrapper,
+    selFloodWarnStateCtxtWrapper
+} from "@/app/hooks/context-wrapper/context-wrapper";
 import {SelectedFloodWarningAction, SelectedFloodWarningState} from "@/app/hooks/states-and-actions";
 
 const defaultState: SelectedFloodWarningState = {
@@ -48,9 +48,9 @@ export const SelectedFloodReducer = (
 }
 
 export const useSelectedFloodWarningStateContext = () => {
-    return useSelectedFloodWarningStateContextWrapper(selectedFloodWarningStateContext);
+    return selFloodWarnStateCtxtWrapper(selectedFloodWarningStateContext);
 }
 
 export const useSelectedFloodWarningDispatchContext = () => {
-    return useSelectedFloodWarningDispatchContextWrapper(selectedFloodWarningDispatchContext);
+    return selFloodWarnDispCtxtWrapper(selectedFloodWarningDispatchContext);
 }

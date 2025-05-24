@@ -2,7 +2,7 @@
 import {
     useSelectedFloodWarningDispatchContext,
     useSelectedFloodWarningStateContext
-} from "@/app/hooks/selected-flood-hook"
+} from "@/app/hooks/flood/selected-flood-hook"
 import {Fragment} from "react";
 import Image from "next/image";
 
@@ -17,7 +17,7 @@ export default function SelectedFlood() {
                 <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-blue-900">
                     <button className="cursor-pointer rounded-full bg-gray-700"
                     onClick={() => {
-                        selectedFloodDispatchContext({type: "COLLAPSE_WARNING"})
+                        selectedFloodDispatchContext({type: "COLLAPSE_WARNING", payload: {newWarning: undefined}})
                     }}>
                         <Image src="/arrow.png"
                                alt="Collapse Flood Dialog"

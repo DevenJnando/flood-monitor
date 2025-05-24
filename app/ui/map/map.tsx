@@ -6,8 +6,8 @@ import {
     FloodWarning,
     MonitoringStation
 } from "@/app/services/flood-api-interfaces";
-import {useDispatchContext} from "@/app/hooks/map-hook";
-import {getHostName, useWindowSize} from "@/app/hooks/utility-functions-hook"
+import {useDispatchContext} from "@/app/hooks/map/map-hook";
+import {getHostName, useWindowSize} from "@/app/hooks/generic-hooks/utility-functions-hook"
 import {generateFloodAreaGeoJSON, generateStationGeoJSON} from "@/app/services/geo-json-bootstrap";
 import {
     generateFloodPlaneLayer,
@@ -15,13 +15,15 @@ import {
     floodLayersAreVisible,
     setLayerFilter
 } from "@/app/map-styling/layers";
-import {Layers, Markers, Sources} from "@/app/ui/map-widgets";
-import MapLegend from "@/app/ui/map-legend";
-import {useEffect, useRef, useState} from "react";
+import {Layers, Markers, Sources} from "@/app/ui/map-widgets/map-widgets";
+import MapLegend from "@/app/ui/map/map-legend";
+import {Fragment, useEffect, useRef, useState} from "react";
 import {Feature, FeatureCollection} from "geojson";
 import {MapRef} from "react-map-gl/mapbox";
 import {LayoutSpecification, PointLike} from "mapbox-gl";
 import {MeasureType} from "@/app/map-styling/layer-enums";
+import {useSelectedMonStnDispatchContext} from "@/app/hooks/monitoring-station/selected-monitoring-station-hook";
+import {useToastContext} from "@/app/hooks/toast/toast-hook";
 
 function loadMapImage(mapRef: MapRef, imageName: string, link: string) {
     mapRef.loadImage(link,
@@ -37,7 +39,7 @@ function loadMapImage(mapRef: MapRef, imageName: string, link: string) {
 }
 
 function selectStationsOnClick(mapRef: MapRef, selectedPoint: PointLike, selectableStations: string[],
-                               selectedStationIds: string[]) {
+                               selectedStationIds: string[]) : string {
     const selectedStations = mapRef.queryRenderedFeatures(selectedPoint, {
         layers: selectableStations
     });
@@ -50,20 +52,23 @@ function selectStationsOnClick(mapRef: MapRef, selectedPoint: PointLike, selecta
                 setLayerFilter(mapRef, id, "no-station-selected");
             }
         });
+        return selectedStations[0].properties?.id;
     } catch(error) {
         selectedStationIds.forEach((id) => {
             setLayerFilter(mapRef, id, "no-station-selected");
         });
-        console.error("Selected point does not contain a valid monitoring station id \n" + error)
+        console.error("Selected point does not contain a valid monitoring station id \n" + error);
+        return "";
     }
 }
 
-export default function FloodMap({currentFloodsMap, monitoringStations}: {
+export default function FloodMap({currentFloodsMap, monitoringStationsMap}: {
     currentFloodsMap: Map<string, DetailedFloodAreaWithWarning>;
-    monitoringStations: MonitoringStation[];
+    monitoringStationsMap: Map<string, MonitoringStation>;
 }) {
     const screenSize = useWindowSize();
     const dispatchContext = useDispatchContext();
+    const selectedMonStnDispContext = useSelectedMonStnDispatchContext();
     const mapRef = useRef<MapRef>(null);
     const [selectedMonitoringStationIds, setSelectedMonitoringStationIds] = useState<string[]>(new Array<string>());
     const [floodLayerIds, setFloodLayerIds] = useState<string[]>(new Array<string>());
@@ -73,6 +78,7 @@ export default function FloodMap({currentFloodsMap, monitoringStations}: {
         latitude: 52.92277,
         zoom: 6
     });
+    const toastNotification = useToastContext();
 
     useEffect(() => {
         const latestTimer = setTimeout(() => {
@@ -189,7 +195,7 @@ export default function FloodMap({currentFloodsMap, monitoringStations}: {
 
     function populateMap() {
         const floodAreasGeoJSON = generateFloodAreaGeoJSON(Array.from(currentFloodsMap.values()));
-        const stationsGeoJSON = generateStationGeoJSON(monitoringStations);
+        const stationsGeoJSON = generateStationGeoJSON(Array.from(monitoringStationsMap.values()));
         if(floodAreasGeoJSON) {
             addSource("flood-areas", floodAreasGeoJSON);
         }
@@ -217,7 +223,6 @@ export default function FloodMap({currentFloodsMap, monitoringStations}: {
         addMonitoringStationLayer(MeasureType.TIDAL_LEVEL, "symbol", "monitoring-stations", "#bb6c04");
         addMonitoringStationLayer(MeasureType.GROUNDWATER, "symbol", "monitoring-stations", "#020202");
     }
-
    return(
        <div className="flex w-full items-center justify-between">
            <Map
@@ -228,6 +233,12 @@ export default function FloodMap({currentFloodsMap, monitoringStations}: {
                mapboxAccessToken="pk.eyJ1IjoiY3JlbmFuZDAiLCJhIjoiY204MXRlY3lsMG1tcjJscXJzdThhMnRnbiJ9.MyrIyAKS0lnO1CP12NCguA"
                ref={mapRef}
                onLoad={() => {
+                   if(monitoringStationsMap.size == 0) {
+                       toastNotification.error({
+                           heading: "Failed to fetch monitoring stations",
+                           message: "Could not retrieve the monitoring stations. It is likely that the live flood data API is down..."
+                       });
+                   }
                    if(mapRef.current){
                        // REMEMBER to fix this! This is temporary just so the images load in development.
                        loadMapImage(mapRef.current, MeasureType.UPSTREAM_STAGE,
@@ -243,7 +254,7 @@ export default function FloodMap({currentFloodsMap, monitoringStations}: {
                }}
                onClick={(e) => {
                    if(mapRef.current){
-                       selectStationsOnClick(mapRef.current, e.point,
+                       const selectedStationId = selectStationsOnClick(mapRef.current, e.point,
                            [
                                MeasureType.UPSTREAM_STAGE,
                                MeasureType.DOWNSTEAM_STAGE,
@@ -251,6 +262,10 @@ export default function FloodMap({currentFloodsMap, monitoringStations}: {
                                MeasureType.GROUNDWATER,
                                MeasureType.RAINFALL
                            ], selectedMonitoringStationIds);
+                       selectedMonStnDispContext({
+                           type: "SELECT_STATION",
+                           payload: {newStation: monitoringStationsMap.get(selectedStationId)}
+                       });
                    }
                }}
             >

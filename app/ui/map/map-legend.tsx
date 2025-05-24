@@ -1,6 +1,6 @@
 "use client"
 import {useState} from "react";
-import {AlertMarker, NoLongerInForceMarker, SevereWarningMarker, WarningMarker, LegendIcon} from "@/app/ui/map-icons";
+import {AlertMarker, NoLongerInForceMarker, SevereWarningMarker, WarningMarker, LegendIcon} from "@/app/ui/map-icons/map-icons";
 
 export default function MapLegend() {
     const [isOpen, setIsOpen] = useState(false);
