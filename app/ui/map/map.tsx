@@ -17,13 +17,14 @@ import {
 } from "@/app/map-styling/layers";
 import {Layers, Markers, Sources} from "@/app/ui/map-widgets/map-widgets";
 import MapLegend from "@/app/ui/map/map-legend";
-import {Fragment, useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Feature, FeatureCollection} from "geojson";
 import {MapRef} from "react-map-gl/mapbox";
 import {LayoutSpecification, PointLike} from "mapbox-gl";
 import {MeasureType} from "@/app/map-styling/layer-enums";
 import {useSelectedMonStnDispatchContext} from "@/app/hooks/monitoring-station/selected-monitoring-station-hook";
 import {useToastContext} from "@/app/hooks/toast/toast-hook";
+import {flushSync} from "react-dom";
 
 function loadMapImage(mapRef: MapRef, imageName: string, link: string) {
     mapRef.loadImage(link,
@@ -193,6 +194,41 @@ export default function FloodMap({currentFloodsMap, monitoringStationsMap}: {
         });
     }
 
+    function floodMapIsEmpty() {
+        if(currentFloodsMap.size == 0) {
+            flushSync(() => {
+                toastNotification.warningWithContent({
+                    id: "warning",
+                    heading: "No floods found",
+                    message: "No floods retrieved from API. Double check the official UK Live Flood Map: ",
+                    content: (props) => (
+                        <ul className="space-y-10 p-5" style={{ flex: '1' }}>
+                            <li className="font-medium text-lg my-3 text-900">{props.message.summary}</li>
+                            <li className="font-normal text-sm">{props.message.detail}</li>
+                            <li className="flex align-items-center gap-2">
+                                <a href="https://check-for-flooding.service.gov.uk/?v=map-live&lyr=mv,ts,tw,ta&ext=-5.090939,50.263438,2.704673,53.004129">
+                                    Live Flood Map
+                                </a>
+                            </li>
+                        </ul>
+                    )
+                });
+            });
+        }
+    }
+
+    function monitoringStationsIsEmpty() {
+        if(monitoringStationsMap.size == 0) {
+            flushSync(() => {
+                toastNotification.error({
+                    id: "error",
+                    heading: "Failed to fetch monitoring stations",
+                    message: "It is highly likely that the flood API has failed. Please check back later.",
+                });
+            });
+        }
+    }
+
     function populateMap() {
         const floodAreasGeoJSON = generateFloodAreaGeoJSON(Array.from(currentFloodsMap.values()));
         const stationsGeoJSON = generateStationGeoJSON(Array.from(monitoringStationsMap.values()));
@@ -223,6 +259,7 @@ export default function FloodMap({currentFloodsMap, monitoringStationsMap}: {
         addMonitoringStationLayer(MeasureType.TIDAL_LEVEL, "symbol", "monitoring-stations", "#bb6c04");
         addMonitoringStationLayer(MeasureType.GROUNDWATER, "symbol", "monitoring-stations", "#020202");
     }
+
    return(
        <div className="flex w-full items-center justify-between">
            <Map
@@ -233,12 +270,8 @@ export default function FloodMap({currentFloodsMap, monitoringStationsMap}: {
                mapboxAccessToken="pk.eyJ1IjoiY3JlbmFuZDAiLCJhIjoiY204MXRlY3lsMG1tcjJscXJzdThhMnRnbiJ9.MyrIyAKS0lnO1CP12NCguA"
                ref={mapRef}
                onLoad={() => {
-                   if(monitoringStationsMap.size == 0) {
-                       toastNotification.error({
-                           heading: "Failed to fetch monitoring stations",
-                           message: "Could not retrieve the monitoring stations. It is likely that the live flood data API is down..."
-                       });
-                   }
+                   floodMapIsEmpty();
+                   monitoringStationsIsEmpty();
                    if(mapRef.current){
                        // REMEMBER to fix this! This is temporary just so the images load in development.
                        loadMapImage(mapRef.current, MeasureType.UPSTREAM_STAGE,

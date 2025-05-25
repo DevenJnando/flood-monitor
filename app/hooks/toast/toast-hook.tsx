@@ -15,31 +15,51 @@ export function ToastProvider({children}: PropsWithChildren) {
         })
     }
 
-    const success = ({heading,message, duration}:ToastType) => {
-        const toastData:ToastType = {heading,message, duration, type:"success"}
+    const success = ({id, heading, message, duration}:ToastType) => {
+        const toastData: ToastType = {id, heading, message, duration, type: "success"}
         toastMessage(toastData)
     };
 
-    const warning = ({heading,message, duration}:ToastType) => {
-        const toastData:ToastType = {heading,message, duration, type:"warn"}
+    const successWithContent = ({id, heading, message, duration, content}: ToastType) => {
+        const toastData: ToastType = {id, heading, message, duration, content, type: "success"};
+        toastMessage(toastData);
+    }
+
+    const warning = ({id, heading, message, duration}:ToastType) => {
+        const toastData: ToastType = {id, heading, message, duration, type: "warn"}
         toastMessage(toastData)
     };
 
-    const info = ({heading,message, duration}:ToastType) => {
-        const toastData:ToastType = {heading,message, duration, type:"info"}
+    const warningWithContent = ({id, heading, message, duration, content}: ToastType) => {
+        const toastData: ToastType = {id, heading, message, duration, content, type: "warn"};
+        toastMessage(toastData);
+    }
+
+    const info = ({id, heading, message, duration}:ToastType) => {
+        const toastData: ToastType = {id, heading, message, duration, type: "info"}
         toastMessage(toastData)
     };
 
-    const error = ({heading,message, duration}:ToastType) => {
-        const toastData:ToastType = {heading,message, duration, type:"error"}
+    const infoWithContent = ({id, heading, message, duration, content}: ToastType) => {
+        const toastData: ToastType = {id, heading, message, duration, content, type: "info"};
+        toastMessage(toastData);
+    }
+
+    const error = ({id, heading, message, duration}:ToastType) => {
+        const toastData: ToastType = {id, heading, message, duration, type: "error"}
         toastMessage(toastData)
     };
 
-    const value:ToastTypeInterface = {success, warning, info, error}
+    const errorWithContent = ({id, heading, message, duration, content}: ToastType) => {
+        const toastData: ToastType = {id, heading, message, duration, content, type: "error"};
+        toastMessage(toastData);
+    }
+
+    const value: ToastTypeInterface = {success, successWithContent, warning, warningWithContent, info, infoWithContent, error, errorWithContent}
 
     return (
         <toastContext.Provider value={value}>
-            {toastData && <ToastComponent toast={toastData}/>}
+            <ToastComponent toast={toastData}/>
             {children}
         </toastContext.Provider>
     )
