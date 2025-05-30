@@ -5,7 +5,7 @@ import {
     FloodArea,
     FloodWarning,
     MonitoringStation,
-    WaterLevelReading
+    MeasureReading
 } from "@/app/services/flood-api-interfaces";
 import {GeoJSON} from "geojson";
 
@@ -24,11 +24,11 @@ export async function getCurrentFloods(): Promise<FloodWarning[]> {
     return currentFloodWarningsArray;
 }
 
-export async function getLatestReadings(): Promise<WaterLevelReading[]> {
-    const latestReadings: WaterLevelReading[] = [];
+export async function getLatestReadings(): Promise<MeasureReading[]> {
+    const latestReadings: MeasureReading[] = [];
     await fetch('https://environment.data.gov.uk/flood-monitoring/data/readings?latest')
         .then(res => res.json())
-        .then(data => data.items.forEach(async (reading: WaterLevelReading) => {
+        .then(data => data.items.forEach(async (reading: MeasureReading) => {
             latestReadings.push(reading);
         }))
         .catch((error: Error) => {

@@ -2,23 +2,24 @@ import * as React from "react";
 import FloodMap from "@/app/ui/map/map";
 import {
     getAllMonitoringStations,
-    getDetailedFloodAreasWithWarnings,
+    getDetailedFloodAreasWithWarnings, getLatestReadings,
     updateFloodAreaGeoJsons
 } from "@/app/services/flood-api-calls";
 import {
-    DetailedFloodAreaWithWarning, MonitoringStation
+    DetailedFloodAreaWithWarning, Measure, MeasureReading, MonitoringStation
 } from "@/app/services/flood-api-interfaces";
 import {MapProvider} from "@/app/hooks/map/map-hook";
 import SelectedFlood from "@/app/ui/selected-flood/selected-flood";
 import SelectedMonitoringStation from "@/app/ui/selected-monitoring-station/selected-monitoring-station";
 import {SelectedFloodProvider} from "@/app/hooks/flood/selected-flood-hook";
 import {SelectedMonStnProvider} from "@/app/hooks/monitoring-station/selected-monitoring-station-hook";
-import {addStationToMeasureLookup} from "@/app/lookup-tables/station-to-measure-lookup-table";
 import {ToastProvider} from "@/app/hooks/toast/toast-hook";
 
 
 const currentFloodsMap: Map<string, DetailedFloodAreaWithWarning> = new Map<string, DetailedFloodAreaWithWarning>();
 const monitoringStationsMap: Map<string, MonitoringStation> = new Map<string, MonitoringStation>();
+const latestMeasureReadingsMap: Map<string, MeasureReading> = new Map<string, MeasureReading>();
+
 const currentFloodsArray: DetailedFloodAreaWithWarning[] = await getDetailedFloodAreasWithWarnings().then((floodWarnings) =>{
     return floodWarnings;
 });
@@ -28,12 +29,22 @@ currentFloodsArray.forEach((floodAreaWithWarning: DetailedFloodAreaWithWarning) 
 await updateFloodAreaGeoJsons(currentFloodsMap, currentFloodsArray);
 
 const monitoringStations = await getAllMonitoringStations();
+const latestMeasureReadings = await getLatestReadings();
+
+latestMeasureReadings.forEach((measureReading: MeasureReading) => {
+    latestMeasureReadingsMap.set(measureReading.measure, measureReading);
+});
 
 monitoringStations.forEach((station: MonitoringStation) => {
-    monitoringStationsMap.set(station.notation, station);
-    if(station.measures){
-        addStationToMeasureLookup(station.notation, station.measures);
+    if(station.measures) {
+        station.measures.forEach((measure: Measure) => {
+            const reading: MeasureReading | undefined = latestMeasureReadingsMap.get(measure["@id"]);
+            if(reading) {
+                measure.latestReading = reading;
+            }
+        })
     }
+    monitoringStationsMap.set(station.notation, station);
 });
 
 

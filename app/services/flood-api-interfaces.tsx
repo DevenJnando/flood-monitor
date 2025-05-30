@@ -62,6 +62,7 @@ export interface Measure {
     "period": number;
     "qualifier": string;
     "unitName": string;
+    "latestReading"?: MeasureReading;
 }
 
 export interface MonitoringStation {
@@ -84,7 +85,7 @@ export interface MonitoringStation {
     "wiskiID": string;
 }
 
-export interface WaterLevelReading {
+export interface MeasureReading {
     "@id": string;
     "dateTime": string;
     "measure": string;

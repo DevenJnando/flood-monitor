@@ -40,7 +40,7 @@ function loadMapImage(mapRef: MapRef, imageName: string, link: string) {
 }
 
 function selectStationsOnClick(mapRef: MapRef, selectedPoint: PointLike, selectableStations: string[],
-                               selectedStationIds: string[]) : string {
+                               selectedStationIds: string[]) : string | undefined {
     const selectedStations = mapRef.queryRenderedFeatures(selectedPoint, {
         layers: selectableStations
     });
@@ -59,7 +59,7 @@ function selectStationsOnClick(mapRef: MapRef, selectedPoint: PointLike, selecta
             setLayerFilter(mapRef, id, "no-station-selected");
         });
         console.error("Selected point does not contain a valid monitoring station id \n" + error);
-        return "";
+        return undefined;
     }
 }
 
@@ -295,10 +295,17 @@ export default function FloodMap({currentFloodsMap, monitoringStationsMap}: {
                                MeasureType.GROUNDWATER,
                                MeasureType.RAINFALL
                            ], selectedMonitoringStationIds);
-                       selectedMonStnDispContext({
-                           type: "SELECT_STATION",
-                           payload: {newStation: monitoringStationsMap.get(selectedStationId)}
-                       });
+                       if(selectedStationId) {
+                           selectedMonStnDispContext({
+                               type: "SELECT_STATION",
+                               payload: {newStation: monitoringStationsMap.get(selectedStationId)}
+                           });
+                       } else {
+                           selectedMonStnDispContext({
+                               type: "COLLAPSE_STATION",
+                               payload: {newStation: undefined}
+                           });
+                       }
                    }
                }}
             >
