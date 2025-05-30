@@ -44,6 +44,11 @@ export const MapReducer = (
                 ...state,
                 sources: [...state.sources, action.payload.source]
             }
+        case "REMOVE_MARKERS":
+            return {
+                ...state,
+                markers: []
+            }
         default:
     }
     return state;

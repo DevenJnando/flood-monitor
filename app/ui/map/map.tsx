@@ -194,6 +194,7 @@ export default function FloodMap({currentFloodsMap, monitoringStationsMap}: {
         });
     }
 
+
     function floodMapIsEmpty() {
         if(currentFloodsMap.size == 0) {
             flushSync(() => {
@@ -312,7 +313,7 @@ export default function FloodMap({currentFloodsMap, monitoringStationsMap}: {
                <Markers />
                <Sources />
                <Layers />
-               <MapLegend/>
+               <MapLegend currentFloodsMap={currentFloodsMap} monitoringStationsMap={monitoringStationsMap}/>
            </Map>
        </div>
    );
