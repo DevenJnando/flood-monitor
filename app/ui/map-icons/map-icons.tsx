@@ -37,6 +37,42 @@ export function NoLongerInForceMarker() {
     );
 }
 
+export function RiverStationIcon() {
+    return (
+        <Image src={"/river-system.png"}
+               width={30}
+               height={30}
+               alt={"Flood Warning No Longer in Force Marker"}/>
+    );
+}
+
+export function RainfallStationIcon() {
+    return (
+        <Image src={"/light-rain-83.png"}
+               width={30}
+               height={30}
+               alt={"Flood Warning No Longer in Force Marker"}/>
+    );
+}
+
+export function TidalStationIcon() {
+    return (
+        <Image src={"/river-and-lake-flow-monitoring-points.png"}
+               width={30}
+               height={30}
+               alt={"Flood Warning No Longer in Force Marker"}/>
+    );
+}
+
+export function GroundwaterStationIcon() {
+    return (
+        <Image src={"/groundwater-source.png"}
+               width={30}
+               height={30}
+               alt={"Flood Warning No Longer in Force Marker"}/>
+    );
+}
+
 export function LegendIcon() {
     return (
         <Image src="/legend-toggle.svg"

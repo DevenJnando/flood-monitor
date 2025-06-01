@@ -1,8 +1,9 @@
-import {ExpressionSpecification, LayoutSpecification, PaintSpecification} from "mapbox-gl";
+import {ExpressionSpecification} from "mapbox-gl";
 import {MapRef} from "react-map-gl/mapbox";
 import {MeasureType} from "@/app/map-styling/layer-enums";
+import {SignedLayoutSpecification, SignedPaintSpecification} from "@/app/ui/map/map-interfaces";
 
-export function floodLayersAreVisible(mapRef: MapRef, isVisible: boolean, floodIds: Array<string>) {
+export function floodLayersAreVisible(mapRef: MapRef | null, isVisible: boolean, floodIds: Array<string>) {
     if(isVisible) {
         if(mapRef){
             floodIds.forEach(floodId => {
@@ -18,15 +19,29 @@ export function floodLayersAreVisible(mapRef: MapRef, isVisible: boolean, floodI
     }
 }
 
-export function setLayerFilter(mapRef: MapRef, layerId: string, propertyId: string) {
-    mapRef.getMap().setFilter(layerId, [
-        "in",
-        "id",
-        propertyId
-    ]);
+export function setLayerFilter(mapRef: MapRef | null, layerId: string, propertyId: string) {
+    if(mapRef){
+        mapRef.getMap().setFilter(layerId, [
+            "in",
+            "id",
+            propertyId
+        ]);
+    }
 }
 
-export function monitoringStationLayersAreVisible(mapRef: MapRef, isVisible: boolean, monitoringStationIds: Array<string>) {
+export function monitoringStationLayerIdIsVisible(mapRef: MapRef | null, monitoringStationId: string, isVisible: boolean) {
+    if(isVisible) {
+        if(mapRef){
+            mapRef.getMap().setLayoutProperty(monitoringStationId, 'visibility', 'visible');
+        }
+    } else {
+        if(mapRef){
+            mapRef.getMap().setLayoutProperty(monitoringStationId, 'visibility', 'none');
+        }
+    }
+}
+
+export function monitoringStationLayersAreVisible(mapRef: MapRef | null, isVisible: boolean, monitoringStationIds: Array<string>) {
     if(isVisible) {
         if(mapRef){
             monitoringStationIds.forEach(monitoringStationId => {
@@ -42,7 +57,7 @@ export function monitoringStationLayersAreVisible(mapRef: MapRef, isVisible: boo
     }
 }
 
-export function generateFloodPlaneLayer(type: string, severityLevel: number) {
+export function generateFloodPlaneLayer(type: string, severityLevel: number): SignedPaintSpecification {
     let color: string = '#000000';
     let modifier: number = 0;
     switch(type){
@@ -54,23 +69,33 @@ export function generateFloodPlaneLayer(type: string, severityLevel: number) {
             modifier = 0.5;
             color = layerColorBySeverity(severityLevel);
             break;
-        case "symbol":
-            modifier = 0.25
-            break;
     }
-    return generateLayer(type, modifier, color);
+    const floodPlaneLayer: SignedPaintSpecification | SignedLayoutSpecification = generateLayer(type, modifier, color);
+    if(floodPlaneLayer.discriminator == "PaintSpecification"){
+        return floodPlaneLayer;
+    } else {
+        console.error("Incorrect style specification returned. Expected PaintSpecification, but received LayoutSpecification.");
+        return {discriminator: "PaintSpecification"};
+    }
 }
 
-export function generateStationLayer(stationType: string, type: string) {
+export function generateStationLayer(stationType: string, type: string): SignedLayoutSpecification {
     const modifier = type === "symbol" ? 0.25 : undefined;
     if (stationType === MeasureType.DOWNSTEAM_STAGE) {
         stationType = MeasureType.UPSTREAM_STAGE;
     }
-    return generateLayer(type, modifier, undefined, stationType);
+    const stationLayer: SignedPaintSpecification | SignedLayoutSpecification = generateLayer(type, modifier, undefined, stationType);
+    if(stationLayer.discriminator == "LayoutSpecification") {
+        stationLayer.visibility = "none";
+        return stationLayer;
+    } else {
+        console.error("Incorrect style specification returned. Expected LayoutSpecification, but received PaintSpecification.");
+        return {discriminator: "LayoutSpecification"};
+    }
 }
 
-function iconSizeOnZoom() {
-    const expression: ExpressionSpecification = [
+function iconSizeOnZoom(): ExpressionSpecification {
+    return [
         "interpolate",
         ["exponential", 1.5],
         ["zoom"],
@@ -79,12 +104,11 @@ function iconSizeOnZoom() {
         18,
         3
     ];
-    return expression;
 }
 
-function generateLayer(type: string, modifier?: number, color?: string, image?: string): object {
-    const paintSpec: PaintSpecification = {};
-    const layoutSpec: LayoutSpecification = {};
+function generateLayer(type: string, modifier?: number, color?: string, image?: string): (SignedPaintSpecification | SignedLayoutSpecification) {
+    const paintSpec: SignedPaintSpecification = {discriminator:"PaintSpecification"};
+    const layoutSpec: SignedLayoutSpecification = {discriminator:"LayoutSpecification"};
     switch (type) {
         case "line":
             paintSpec["line-color"] = color;
@@ -102,11 +126,11 @@ function generateLayer(type: string, modifier?: number, color?: string, image?: 
             layoutSpec.visibility = "visible";
             return layoutSpec;
         default:
-            return {}
+            return {discriminator:"PaintSpecification"}
     }
 }
 
-function layerColorBySeverity(severityLevel: number) {
+function layerColorBySeverity(severityLevel: number): string {
     let color = '#000000';
     switch (severityLevel) {
         case 1:

@@ -1,8 +1,13 @@
 import {FloodWarning, MonitoringStation} from "@/app/services/flood-api-interfaces";
-import {LayoutSpecification, PaintSpecification} from "mapbox-gl";
 import {Feature, FeatureCollection} from "geojson";
-import {LayerType, MarkerType, SourceType} from "@/app/ui/map/map-interfaces";
-import {ToastData, ToastType} from "@/app/ui/toast/toast-interface";
+import {
+    LayerType,
+    MarkerType,
+    SignedLayoutSpecification,
+    SignedPaintSpecification,
+    SourceType
+} from "@/app/ui/map/map-interfaces";
+import {ToastData} from "@/app/ui/toast/toast-interface";
 
 export interface SelectedFloodWarningState {
     selectedWarning: FloodWarning | undefined;
@@ -56,14 +61,18 @@ export interface MapAction {
             id: string,
             type: string,
             source: string,
-            paint?: PaintSpecification,
-            layout?: LayoutSpecification,
+            paint?: SignedPaintSpecification,
+            layout?: SignedLayoutSpecification,
             filter?: Array<string>,
             severityLevel?: number
         } | undefined
         source?: {
             id: string,
             data: FeatureCollection | Feature
-        }
+        } | undefined
+        layerVisibility?: {
+            id: string,
+            visibility: boolean
+        } | undefined
     }
 }

@@ -20,11 +20,12 @@ import MapLegend from "@/app/ui/map/map-legend";
 import {useEffect, useRef, useState} from "react";
 import {Feature, FeatureCollection} from "geojson";
 import {MapRef} from "react-map-gl/mapbox";
-import {LayoutSpecification, PointLike} from "mapbox-gl";
+import {LayoutSpecification, PaintSpecification, PointLike} from "mapbox-gl";
 import {MeasureType} from "@/app/map-styling/layer-enums";
 import {useSelectedMonStnDispatchContext} from "@/app/hooks/monitoring-station/selected-monitoring-station-hook";
 import {useToastContext} from "@/app/hooks/toast/toast-hook";
 import {flushSync} from "react-dom";
+import {SignedLayoutSpecification, SignedPaintSpecification} from "@/app/ui/map/map-interfaces";
 
 function loadMapImage(mapRef: MapRef, imageName: string, link: string) {
     mapRef.loadImage(link,
@@ -110,9 +111,8 @@ export default function FloodMap({currentFloodsMap, monitoringStationsMap}: {
     }
 
     function addFloodPlaneLayer(id: string, type: string, source: string, filter: string, severityLevel: number) {
-        const paint = generateFloodPlaneLayer(type, severityLevel);
-        const layout: LayoutSpecification = {}
-        layout.visibility = "none";
+        const paint: SignedPaintSpecification = generateFloodPlaneLayer(type, severityLevel);
+        const layout: SignedLayoutSpecification = {discriminator:"LayoutSpecification", visibility: "none"};
         setFloodLayerIds(curr => [...curr, id]);
         dispatchContext({type: "ADD_LAYER",
             payload:{
@@ -135,49 +135,54 @@ export default function FloodMap({currentFloodsMap, monitoringStationsMap}: {
     }
 
     function addMonitoringStationLayer(id: string, type: string, source: string, iconColour: string) {
-        const layout = generateStationLayer(id, type);
+        const layout: SignedLayoutSpecification = generateStationLayer(id, type);
         setMonitoringStationIds((curr) => [...curr, id]);
-
         // sets the initial symbol layers for the monitoring stations
-        dispatchContext({type: "ADD_LAYER",
-        payload:{
-            layer:
-                {
-                    id: id,
-                    type: type,
-                    source: source,
-                    layout: layout,
-                    paint: {
-                        "icon-color": iconColour
-                    },
-                    filter: [
-                        "==",
-                        "type",
-                        id
-                    ]
-                }
-        }});
+        dispatchContext({
+            type: "ADD_LAYER",
+            payload: {
+                layer:
+                    {
+                        id: id,
+                        type: type,
+                        source: source,
+                        layout: layout,
+                        paint: {
+                            discriminator: "PaintSpecification",
+                            "icon-color": iconColour
+                        },
+                        filter: [
+                            "==",
+                            "type",
+                            id
+                        ]
+                    }
+            }
+        });
 
         // sets an additional layer which will become visible if a station is selected by the user
         setSelectedMonitoringStationIds((curr) => [...curr, id + " highlighted"]);
-        dispatchContext({type: "ADD_LAYER",
-        payload:{
-            layer:
-                {
-                    id: id + " highlighted",
-                    type: type,
-                    source: source,
-                    layout: layout,
-                    paint: {
-                        "icon-color": "#13d736"
-                    },
-                    filter: [
-                        "in",
-                        "id",
-                        "no-station-selected"
-                    ]
-                }
-        }});
+        dispatchContext({
+            type: "ADD_LAYER",
+            payload: {
+                layer:
+                    {
+                        id: id + " highlighted",
+                        type: type,
+                        source: source,
+                        layout: layout,
+                        paint: {
+                            discriminator: "PaintSpecification",
+                            "icon-color": "#13d736"
+                        },
+                        filter: [
+                            "in",
+                            "id",
+                            "no-station-selected"
+                        ]
+                    }
+            }
+        });
     }
 
     function addMarker(long: number, lat: number, warning?: FloodWarning) {
@@ -313,7 +318,7 @@ export default function FloodMap({currentFloodsMap, monitoringStationsMap}: {
                <Markers />
                <Sources />
                <Layers />
-               <MapLegend currentFloodsMap={currentFloodsMap} monitoringStationsMap={monitoringStationsMap}/>
+               <MapLegend mapRef={mapRef} currentFloodsMap={currentFloodsMap} monitoringStationsMap={monitoringStationsMap}/>
            </Map>
        </div>
    );

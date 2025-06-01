@@ -5,7 +5,13 @@ import {MapAction, MapState} from "@/app/hooks/states-and-actions";
 
 const defaultState: MapState = {
     markers: [{long: 0, lat: 0, severityLevel: 0}],
-    layers: [{id: '', type: '', source: '', paint: {}, layout: {}, severityLevel: 0}],
+    layers: [{id: '', type: '', source: '',
+        paint: {
+            discriminator:"PaintSpecification"
+        },
+        layout: {
+            discriminator:"LayoutSpecification"
+        }, severityLevel: 0}],
     sources: [{id: '', data: undefined}]
 }
 const mapStateContext = createContext(defaultState);
