@@ -16,7 +16,7 @@ import {FloodFilters, StationFilters} from "@/app/ui/map/map-interfaces";
 import {monitoringStationLayerIdIsVisible} from "@/app/map-styling/layers";
 import {MapRef} from "react-map-gl/mapbox";
 
-export default function MapLegend({mapRef, currentFloodsMap, monitoringStationsMap}: {
+export default function MapLegend({mapRef, currentFloodsMap}: {
     mapRef: RefObject<MapRef | null>;
     currentFloodsMap: Map<string, DetailedFloodAreaWithWarning>;
     monitoringStationsMap: Map<string, MonitoringStation>;
@@ -57,10 +57,15 @@ export default function MapLegend({mapRef, currentFloodsMap, monitoringStationsM
         if(mapRef){
             if(mapRef.current?.isStyleLoaded()){
                 monitoringStationLayerIdIsVisible(mapRef.current, MeasureType.UPSTREAM_STAGE, stationFilters.filterRivers);
+                monitoringStationLayerIdIsVisible(mapRef.current, MeasureType.UPSTREAM_STAGE + " highlighted", stationFilters.filterRivers);
                 monitoringStationLayerIdIsVisible(mapRef.current, MeasureType.DOWNSTEAM_STAGE, stationFilters.filterRivers);
+                monitoringStationLayerIdIsVisible(mapRef.current, MeasureType.DOWNSTEAM_STAGE + " highlighted", stationFilters.filterRivers);
                 monitoringStationLayerIdIsVisible(mapRef.current, MeasureType.TIDAL_LEVEL, stationFilters.filterTidal);
+                monitoringStationLayerIdIsVisible(mapRef.current, MeasureType.TIDAL_LEVEL + " highlighted", stationFilters.filterTidal);
                 monitoringStationLayerIdIsVisible(mapRef.current, MeasureType.RAINFALL, stationFilters.filterRainfall);
+                monitoringStationLayerIdIsVisible(mapRef.current, MeasureType.RAINFALL + " highlighted", stationFilters.filterRainfall);
                 monitoringStationLayerIdIsVisible(mapRef.current, MeasureType.GROUNDWATER, stationFilters.filterGroundwater);
+                monitoringStationLayerIdIsVisible(mapRef.current, MeasureType.GROUNDWATER + " highlighted", stationFilters.filterGroundwater);
             }
         }
     }, [stationFilters]);

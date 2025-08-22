@@ -3,7 +3,7 @@ import {
     useSelectedMonStnDispatchContext,
     useSelectedMonStnStateContext
 } from "@/app/hooks/monitoring-station/selected-monitoring-station-hook"
-import {Fragment, Key} from "react";
+import {Key} from "react";
 import Image from "next/image";
 import {Measure} from "@/app/services/flood-api-interfaces";
 import {MeasureType} from "@/app/map-styling/layer-enums";

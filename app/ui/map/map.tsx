@@ -20,7 +20,7 @@ import MapLegend from "@/app/ui/map/map-legend";
 import {useEffect, useRef, useState} from "react";
 import {Feature, FeatureCollection} from "geojson";
 import {MapRef} from "react-map-gl/mapbox";
-import {LayoutSpecification, PaintSpecification, PointLike} from "mapbox-gl";
+import {PointLike} from "mapbox-gl";
 import {MeasureType} from "@/app/map-styling/layer-enums";
 import {useSelectedMonStnDispatchContext} from "@/app/hooks/monitoring-station/selected-monitoring-station-hook";
 import {useToastContext} from "@/app/hooks/toast/toast-hook";
