@@ -179,11 +179,11 @@ export default function MapLegend({mapRef, currentFloodsMap}: {
         dispatchContext({type: "REMOVE_MARKERS", payload: {}})
     }
 
-    const visibility = isOpen? "max-w-1/6 max-h-1/2 z-100 ml-auto mt-25 bg-amber-200/65 opacity-85 transition-all"
+    const visibility = isOpen? "max-w-1/6 max-h-1/2 z-100 ml-auto mt-60 bg-amber-200/65 opacity-85 transition-all"
         : "max-w-0 max-h-1/2 z-100 ml-auto mt-25 bg-amber-200/65 opacity-85 transition-all"
     return(
         <div className="overflow-hidden">
-            <div className="float-right mt-5 cursor-pointer z-60 opacity-90 bg-gray-500/40">
+            <div className="float-right mt-40 cursor-pointer z-60 opacity-90 bg-gray-500/40">
                 <button className="cursor-pointer"
                         onClick={toggleOpen}>
                     <LegendIcon/>

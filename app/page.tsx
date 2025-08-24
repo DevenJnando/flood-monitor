@@ -14,6 +14,7 @@ import SelectedMonitoringStation from "@/app/ui/selected-monitoring-station/sele
 import {SelectedFloodProvider} from "@/app/hooks/flood/selected-flood-hook";
 import {SelectedMonStnProvider} from "@/app/hooks/monitoring-station/selected-monitoring-station-hook";
 import {ToastProvider} from "@/app/hooks/toast/toast-hook";
+import Navbar from "@/app/ui/navbar/navbar"
 
 
 const currentFloodsMap: Map<string, DetailedFloodAreaWithWarning> = new Map<string, DetailedFloodAreaWithWarning>();
@@ -50,17 +51,16 @@ monitoringStations.forEach((station: MonitoringStation) => {
 
 export default function Home() {
     return (
-        <div className="font-[family-name:var(--font-geist-sans)]">
-          <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start content-evenly">
+        <div className="font-[family-name:var(--font-lato))]">
+          <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+              <Navbar>
+              </Navbar>
               <MapProvider>
                   <SelectedFloodProvider>
                       <SelectedMonStnProvider>
                           <div className="flex flex-col relative">
                               <SelectedFlood/>
                               <SelectedMonitoringStation/>
-                              <aside className="fixed top-0 right-0 z-40">
-                                  <p className="text-black">this uses Environment Agency flood and river level data from the real-time data API (Beta)</p>
-                              </aside>
                               <ToastProvider>
                                   <FloodMap
                                       currentFloodsMap={currentFloodsMap}
