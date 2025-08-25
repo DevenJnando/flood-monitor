@@ -60,6 +60,13 @@ export default function NotificationsPage() {
                     Enter your email address and postcode above to be alerted whenever your area is at risk of flooding
                 </p>
                 <p className="max-w-6xl shrink px-4 mx-auto mt-10 text-base text-center text-gray-500
+                dark:text-gray-400 md:text-xl font-bold">
+                    Note: the first attempt to enter your details may fail with an "unknown error has occurred" message.
+                    This is normal. I'm just one man, and databases are expensive. Therefore, my database is set to auto-pause
+                    during periods of inactivity, and it can take a minute or two for the database to come back online again
+                    when not in use. If this happens, just wait a minute, pop your details back in, and it should work.
+                </p>
+                <p className="max-w-6xl shrink px-4 mx-auto mt-10 text-base text-center text-gray-500
                 dark:text-gray-400 md:text-xl">
                     (Hint: If you have multiple postcodes you want to associate with an email, you can do so by separating each
                     postcode with a comma. Like this: A11A11, B22B22)
