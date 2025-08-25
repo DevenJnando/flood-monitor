@@ -26,6 +26,7 @@ import {useSelectedMonStnDispatchContext} from "@/app/hooks/monitoring-station/s
 import {useToastContext} from "@/app/hooks/toast/toast-hook";
 import {flushSync} from "react-dom";
 import {SignedLayoutSpecification, SignedPaintSpecification} from "@/app/ui/map/map-interfaces";
+import {useSelectedFloodWarningDispatchContext} from "@/app/hooks/flood/selected-flood-hook";
 
 function loadMapImage(mapRef: MapRef, imageName: string, link: string) {
     mapRef.loadImage(link,
@@ -64,12 +65,22 @@ function selectStationsOnClick(mapRef: MapRef, selectedPoint: PointLike, selecta
     }
 }
 
-export default function FloodMap({currentFloodsMap, monitoringStationsMap}: {
+export default function FloodMap(
+    {
+        mapboxAccessToken,
+        currentFloodsMap,
+        monitoringStationsMap,
+        selectedFloodID = undefined
+}: {
+    mapboxAccessToken: string | undefined,
     currentFloodsMap: Map<string, DetailedFloodAreaWithWarning>;
     monitoringStationsMap: Map<string, MonitoringStation>;
+    selectedFloodID: string | undefined;
 }) {
+
     const screenSize = useWindowSize();
     const dispatchContext = useDispatchContext();
+    const selectedFloodDispatchContext = useSelectedFloodWarningDispatchContext();
     const selectedMonStnDispContext = useSelectedMonStnDispatchContext();
     const mapRef = useRef<MapRef>(null);
     const [selectedMonitoringStationIds, setSelectedMonitoringStationIds] = useState<string[]>(new Array<string>());
@@ -80,6 +91,7 @@ export default function FloodMap({currentFloodsMap, monitoringStationsMap}: {
         latitude: 52.92277,
         zoom: 6
     });
+
     const toastNotification = useToastContext();
 
     useEffect(() => {
@@ -97,6 +109,7 @@ export default function FloodMap({currentFloodsMap, monitoringStationsMap}: {
 
         return () => clearTimeout(latestTimer);
     });
+
 
     function addSource(id: string, data: FeatureCollection | Feature) {
         dispatchContext({type: "ADD_SOURCE",
@@ -223,6 +236,7 @@ export default function FloodMap({currentFloodsMap, monitoringStationsMap}: {
         }
     }
 
+
     function monitoringStationsIsEmpty() {
         if(monitoringStationsMap.size == 0) {
             flushSync(() => {
@@ -235,6 +249,20 @@ export default function FloodMap({currentFloodsMap, monitoringStationsMap}: {
         }
     }
 
+
+    function selectFloodOnLoad(floodArea: DetailedFloodAreaWithWarning) {
+        mapRef?.current?.flyTo({
+            center: [floodArea.long, floodArea.lat],
+            zoom: 15,
+            essential: true
+        });
+        selectedFloodDispatchContext({
+            type: "SELECT_WARNING",
+            payload: {newWarning: floodArea.currentWarning}
+        });
+    }
+
+
     function populateMap() {
         const floodAreasGeoJSON = generateFloodAreaGeoJSON(Array.from(currentFloodsMap.values()));
         const stationsGeoJSON = generateStationGeoJSON(Array.from(monitoringStationsMap.values()));
@@ -246,6 +274,10 @@ export default function FloodMap({currentFloodsMap, monitoringStationsMap}: {
         }
         Array.from(currentFloodsMap.values()).map((floodAreaWithWarning: DetailedFloodAreaWithWarning) => {
             if(floodAreaWithWarning.currentWarning){
+                const selectOnLoad: boolean = floodAreaWithWarning.notation == selectedFloodID
+                if(selectOnLoad){
+                    selectFloodOnLoad(floodAreaWithWarning)
+                }
                 addFloodPlaneLayer(
                     floodAreaWithWarning.notation + " line", "line",
                     "flood-areas",
@@ -256,7 +288,10 @@ export default function FloodMap({currentFloodsMap, monitoringStationsMap}: {
                     "flood-areas",
                     floodAreaWithWarning.notation,
                     floodAreaWithWarning.currentWarning.severityLevel);
-                addMarker(floodAreaWithWarning.long, floodAreaWithWarning.lat, floodAreaWithWarning.currentWarning);
+                addMarker(
+                    floodAreaWithWarning.long,
+                    floodAreaWithWarning.lat,
+                    floodAreaWithWarning.currentWarning);
             }
         });
         addMonitoringStationLayer(MeasureType.UPSTREAM_STAGE, "symbol", "monitoring-stations", "#5074d2");
@@ -273,12 +308,13 @@ export default function FloodMap({currentFloodsMap, monitoringStationsMap}: {
                onMove={e =>setViewState(e.viewState)}
                style={{width: screenSize.width, height: screenSize.height}}
                mapStyle={"https://api.maptiler.com/maps/streets/style.json?key=U2udwPDvVDDdAolS5wws"}
-               mapboxAccessToken="pk.eyJ1IjoiY3JlbmFuZDAiLCJhIjoiY204MXRlY3lsMG1tcjJscXJzdThhMnRnbiJ9.MyrIyAKS0lnO1CP12NCguA"
+               mapboxAccessToken={mapboxAccessToken}
                ref={mapRef}
                onLoad={() => {
                    floodMapIsEmpty();
                    monitoringStationsIsEmpty();
                    if(mapRef.current){
+                       mapRef.current.resize()
                        // REMEMBER to fix this! This is temporary just so the images load in development.
                        loadMapImage(mapRef.current, MeasureType.UPSTREAM_STAGE,
                            "http://" + getHostName() + ":3000/river-system.png");

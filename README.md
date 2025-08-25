@@ -1,8 +1,22 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is the frontend of my flood monitoring/notification system project.
+Currently, there are two aspects to this frontend: the live flood visualisation map,
+and the notification subscription system where you can enter your email + postcode(s)
+you wish to be notified for.
 
-## Getting Started
+## Introduction
 
-First, run the development server:
+This is a next.js SPA which fetches flood data from the [UK Environmental Agency API](https://environment.data.gov.uk/flood-monitoring/doc/reference)
+and visualises said data in a comprehensive flood map. It is important to note that this application only
+covers `England` (unfortunately...). It does *not* cover `Scotland`, `Northern Ireland` or `Wales`.
+
+This is something which is currently out of my control. I may look into means of extending this
+service to these countries in the future, but as far as I know, currently there is no way
+of reasonably doing this...my deepest apologies.
+
+The frontend will not work properly without the proper credentials/endpoints for 
+all the other parts of the stack, but you're welcome to fork and modify the map
+itself to your heart's content. Once you have forked everything and installed all
+dependencies, just run:
 
 ```bash
 npm run dev
@@ -14,23 +28,97 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+and then open your browser to [http://localhost:3000](http://localhost:3000) to see the rendered frontend
+on your local machine.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## API fetches
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+API fetches are taken care of in the following directory:
 
-## Learn More
+```bash
+./app
+├── services
+│   ├── [flood-api-calls.tsx]
+│   ├── flood-api-interfaces.tsx
+│   ├── geo-json-bootstrap.ts
+│   └── subscriber-api-calls.tsx
 
-To learn more about Next.js, take a look at the following resources:
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Current flood information, including the description, severity and the 
+area the flood is encapsulated are all fetched here.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Monitoring station readings are also fetched from here.
 
-## Deploy on Vercel
+Since this is a blocking process, the map is dynamically loaded using the map renderer,
+located in the following directory:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+./app
+└── ui
+    ├── map
+    │   ├── map-interfaces.tsx
+    │   ├── map-legend.tsx
+    │   ├── [map-renderer.tsx]
+    │   ├── map-skeleton.tsx
+    │   └── map.tsx
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## The Live Flood Map
+
+The flood map is loaded from the main page of this frontend, but it can also be
+accessed by clicking the `Live Map` link in the navigation bar at the top of the screen.
+
+The map is made using the [react-map-gl](https://visgl.github.io/react-map-gl/), which
+is an extension library which "reactifys" [Mapbox GL](https://www.mapbox.com/mapbox-gljs).
+This library was chosen for its incredible versatility, customisation and extensibility.
+
+Map markers represent the general location of the flood and, 
+when clicked, show the user all relevant details for that selected flood.
+Flood warnings/alerts range from:
+
+- Severe warning
+- Warning
+- Alert
+- No longer in force
+
+and are represented with a deep red, a lighter red, yellow, and blue respectively.
+
+The flood area is illustrated to the user once any given flood is zoomed in on.
+These flood areas are represented as layers on the map. The colour of the layer reflects
+the severity of the flood.
+
+Monitoring stations are selectable symbols; symbols are similar to markers, 
+but they are baked into the map's style properties.
+
+Monitoring stations show the water level, or the flow rate for:
+
+- Rivers
+- Coastal Tides
+- Rainwater
+- Groundwater
+
+and like markers, they yield more information when clicked.
+Monitoring stations are hidden by default, and can be toggled using the map legend in
+the top right. Flood warnings can also be toggled in this way.
+
+## The Notifications System
+
+In the background, there is a notification system which fetches current warnings
+every 30 minutes and sends updates by email to anybody who lives within any
+given flood area (so long as they are subscribed to the mailing list, naturally!)
+
+This system is outside the scope of this repository, so the details won't be described here.
+There is, however a `Notifications` link on the navigation bar which presents
+the user with a form. 
+
+This form takes the user's email address, and postcode(s)
+to "listen" to. If any flood intersects with these postcodes, a notification
+with the flood details and a link to the flood on the live map will be sent to the
+user.
+
+If you want to enter more than one postcode at a time, just separate the postcodes
+with a comma, like this:
+`A11 111, B22 222, C33 333`
+
+You can enter postcodes with or without spaces, it doesn't matter.

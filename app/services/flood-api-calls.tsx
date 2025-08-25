@@ -1,6 +1,5 @@
 'use server'
 import {
-    DetailedFloodArea,
     DetailedFloodAreaWithWarning,
     FloodArea,
     FloodWarning,
@@ -54,19 +53,6 @@ export async function getAllMonitoringStations(): Promise<MonitoringStation[]> {
     return stations;
 }
 
-export async function getAllFloodAreas(): Promise<Map<string, DetailedFloodArea>> {
-    const floodAreaMap: Map<string, DetailedFloodArea> = new Map();
-    await fetch('https://environment.data.gov.uk/flood-monitoring/id/floodAreas')
-        .then(res => res.json())
-        .then(data => data.items.forEach((floodArea: DetailedFloodArea) => {
-            floodAreaMap.set(floodArea.fwdCode, floodArea);
-        }))
-        .catch((error: Error) => {
-            console.error("API fetch error: ", error);
-            return floodAreaMap;
-        });
-    return floodAreaMap;
-}
 
 export async function getSpecificFloodArea(floodAreaId: string): Promise<DetailedFloodAreaWithWarning> {
     return await fetch(`https://environment.data.gov.uk/flood-monitoring/id/floodAreas/${floodAreaId}`)

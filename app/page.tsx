@@ -1,76 +1,51 @@
 import * as React from "react";
-import FloodMap from "@/app/ui/map/map";
-import {
-    getAllMonitoringStations,
-    getDetailedFloodAreasWithWarnings, getLatestReadings,
-    updateFloodAreaGeoJsons
-} from "@/app/services/flood-api-calls";
-import {
-    DetailedFloodAreaWithWarning, Measure, MeasureReading, MonitoringStation
-} from "@/app/services/flood-api-interfaces";
 import {MapProvider} from "@/app/hooks/map/map-hook";
+import {MapSkeleton} from "@/app/ui/map/map-skeleton";
 import SelectedFlood from "@/app/ui/selected-flood/selected-flood";
 import SelectedMonitoringStation from "@/app/ui/selected-monitoring-station/selected-monitoring-station";
 import {SelectedFloodProvider} from "@/app/hooks/flood/selected-flood-hook";
 import {SelectedMonStnProvider} from "@/app/hooks/monitoring-station/selected-monitoring-station-hook";
 import {ToastProvider} from "@/app/hooks/toast/toast-hook";
 import Navbar from "@/app/ui/navbar/navbar"
+import {Suspense} from "react";
+import MapRenderer from "@/app/ui/map/map-renderer";
+import FloodMap from "@/app/ui/map/map";
 
 
-const currentFloodsMap: Map<string, DetailedFloodAreaWithWarning> = new Map<string, DetailedFloodAreaWithWarning>();
-const monitoringStationsMap: Map<string, MonitoringStation> = new Map<string, MonitoringStation>();
-const latestMeasureReadingsMap: Map<string, MeasureReading> = new Map<string, MeasureReading>();
-
-const currentFloodsArray: DetailedFloodAreaWithWarning[] = await getDetailedFloodAreasWithWarnings().then((floodWarnings) =>{
-    return floodWarnings;
-});
-currentFloodsArray.forEach((floodAreaWithWarning: DetailedFloodAreaWithWarning) => {
-    currentFloodsMap.set(floodAreaWithWarning.notation, floodAreaWithWarning);
-})
-await updateFloodAreaGeoJsons(currentFloodsMap, currentFloodsArray);
-
-const monitoringStations = await getAllMonitoringStations();
-const latestMeasureReadings = await getLatestReadings();
-
-latestMeasureReadings.forEach((measureReading: MeasureReading) => {
-    latestMeasureReadingsMap.set(measureReading.measure, measureReading);
-});
-
-monitoringStations.forEach((station: MonitoringStation) => {
-    if(station.measures) {
-        station.measures.forEach((measure: Measure) => {
-            const reading: MeasureReading | undefined = latestMeasureReadingsMap.get(measure["@id"]);
-            if(reading) {
-                measure.latestReading = reading;
-            }
-        })
+export default async function Home(
+    {
+        searchParams,
+    }: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+    const params = await searchParams
+    let id = params.id
+    if(id){
+        if(typeof(id) != "string"){
+            id = ""
+        }
     }
-    monitoringStationsMap.set(station.notation, station);
-});
-
-
-export default function Home() {
+    const selectedFloodID = id
     return (
         <div className="font-[family-name:var(--font-lato))]">
           <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
               <Navbar>
               </Navbar>
-              <MapProvider>
-                  <SelectedFloodProvider>
-                      <SelectedMonStnProvider>
-                          <div className="flex flex-col relative">
-                              <SelectedFlood/>
-                              <SelectedMonitoringStation/>
-                              <ToastProvider>
-                                  <FloodMap
-                                      currentFloodsMap={currentFloodsMap}
-                                      monitoringStationsMap={monitoringStationsMap}
-                                  />
-                              </ToastProvider>
-                          </div>
-                      </SelectedMonStnProvider>
-                  </SelectedFloodProvider>
-              </MapProvider>
+              <Suspense fallback={<MapSkeleton/>}>
+                  <MapProvider>
+                      <SelectedFloodProvider>
+                          <SelectedMonStnProvider>
+                              <div className="flex flex-col relative">
+                                      <SelectedFlood/>
+                                      <SelectedMonitoringStation/>
+                                      <ToastProvider>
+                                          <MapRenderer selectedFloodID={selectedFloodID}/>
+                                      </ToastProvider>
+                              </div>
+                          </SelectedMonStnProvider>
+                      </SelectedFloodProvider>
+                  </MapProvider>
+              </Suspense>
           </main>
         </div>
     );
