@@ -4,6 +4,7 @@ import * as React from "react";
 import Navbar from "@/app/ui/navbar/navbar"
 import {addSubscriber} from "@/app/notifications/form-action";
 import {useActionState} from "react";
+import LoadingSpinner from "@/app/ui/spinner/LoadingSpinner";
 
 
 const initialState = {
@@ -43,7 +44,12 @@ export default function NotificationsPage() {
                     </div>
                     <div className="mt-5">
                         <button className="bg-blue-500 hover:bg-blue-700 shrink text-black font-bold py-2 px-4 rounded-full"
-                                type="submit">Get Notifications</button>
+                                type="submit">
+                            Get Notifications
+                        </button>
+                        <div className="flex items-center justify-center mt-5">
+                            {pending? <LoadingSpinner /> : ""}
+                        </div>
                         {state?.message && state?.error &&
                             <p className="text-red-700 shrink" aria-live="polite">
                                 {state.message}
@@ -58,13 +64,6 @@ export default function NotificationsPage() {
                 <p className="max-w-6xl shrink px-4 mx-auto mt-10 text-base text-center text-gray-500
                 dark:text-gray-400 md:text-xl">
                     Enter your email address and postcode above to be alerted whenever your area is at risk of flooding
-                </p>
-                <p className="max-w-6xl shrink px-4 mx-auto mt-10 text-base text-center text-gray-500
-                dark:text-gray-400 md:text-xl font-bold">
-                    Note: the first attempt to enter your details may fail with an "unknown error has occurred" message.
-                    This is normal. I'm just one man, and databases are expensive. Therefore, my database is set to auto-pause
-                    during periods of inactivity, and it can take a minute or two for the database to come back online again
-                    when not in use. If this happens, just wait a minute, pop your details back in, and it should work.
                 </p>
                 <p className="max-w-6xl shrink px-4 mx-auto mt-10 text-base text-center text-gray-500
                 dark:text-gray-400 md:text-xl">

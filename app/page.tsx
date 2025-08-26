@@ -9,7 +9,6 @@ import {ToastProvider} from "@/app/hooks/toast/toast-hook";
 import Navbar from "@/app/ui/navbar/navbar"
 import {Suspense} from "react";
 import MapRenderer from "@/app/ui/map/map-renderer";
-import FloodMap from "@/app/ui/map/map";
 
 
 export default async function Home(
@@ -17,7 +16,7 @@ export default async function Home(
         searchParams,
     }: {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-}) {
+    }) {
     const params = await searchParams
     let id = params.id
     if(id){
