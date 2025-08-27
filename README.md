@@ -53,9 +53,30 @@ This is something which is currently out of my control. I may look into means of
 service to these countries in the future, but as far as I know, currently there is no way
 of reasonably doing this...my deepest apologies.
 
-The frontend will not work properly without the proper credentials/endpoints for 
+### Mapbox
+
+While mapbox is a dependency listed in `package.json` and does not need to be installed independently of
+this application, you do still need a mapbox account and a valid API key to view the rendered map.
+There is a free tier which you can sign up for [here](https://account.mapbox.com/auth/signup/?page=/).
+
+
+### Environment variables
+The frontend will not work properly without the proper credentials/endpoints for
 all the other parts of the stack, but you're welcome to fork and modify the map
-itself to your heart's content. Once you have cloned/forked everything and installed all
+itself to your heart's content.
+
+To do so, create an `.env` file and fill out the required variables according to the
+`.env_template`
+
+Once you have your mapbox key, paste this as the value for the `MAPBOX_TOKEN` variable.
+Remove the `_template` extension so you now have a `.env` file, and the application
+should work upon installation.
+
+
+### Installation and running
+
+
+Once you have cloned/forked everything and installed all
 dependencies with ```npm install```, just run:
 
 ```bash
