@@ -37,6 +37,38 @@ export default function MapLegend({mapRef, currentFloodsMap}: {
     });
 
     useEffect(() => {
+
+        function addMarker(long: number, lat: number, warning?: FloodWarning) {
+            dispatchContext({type: "ADD_MARKER",
+                payload:{
+                    marker:
+                        {
+                            warning: warning,
+                            long: long,
+                            lat: lat,
+                            severityLevel: warning?.severityLevel
+                        }
+                }
+            });
+        }
+
+        function filterMarkers(filter: number[]) {
+            removeMarkers();
+            Array.from(currentFloodsMap.values()).map((floodAreaWithWarning: DetailedFloodAreaWithWarning) => {
+                if(floodAreaWithWarning.currentWarning?.severityLevel) {
+                    filter.forEach((toBeVisible: number) => {
+                        if(floodAreaWithWarning.currentWarning?.severityLevel == toBeVisible){
+                            addMarker(floodAreaWithWarning.long, floodAreaWithWarning.lat, floodAreaWithWarning.currentWarning);
+                        }
+                    });
+                }
+            });
+        }
+
+        function removeMarkers() {
+            dispatchContext({type: "REMOVE_MARKERS", payload: {}})
+        }
+
         const selectedMarkers: number[] = []
         if(floodFilters.filterSevereWarning) {
             selectedMarkers.push(1);
@@ -51,7 +83,7 @@ export default function MapLegend({mapRef, currentFloodsMap}: {
             selectedMarkers.push(4);
         }
         filterMarkers(selectedMarkers);
-    }, [floodFilters]);
+    }, [floodFilters, currentFloodsMap, dispatchContext]);
 
     useEffect(() => {
         if(mapRef){
@@ -68,7 +100,7 @@ export default function MapLegend({mapRef, currentFloodsMap}: {
                 monitoringStationLayerIdIsVisible(mapRef.current, MeasureType.GROUNDWATER + " highlighted", stationFilters.filterGroundwater);
             }
         }
-    }, [stationFilters]);
+    }, [stationFilters, mapRef]);
 
     const toggleCheckedFloods = (value: number) => {
         switch (value) {
@@ -148,36 +180,6 @@ export default function MapLegend({mapRef, currentFloodsMap}: {
         setIsOpen(!isOpen);
     };
 
-    function addMarker(long: number, lat: number, warning?: FloodWarning) {
-        dispatchContext({type: "ADD_MARKER",
-            payload:{
-                marker:
-                    {
-                        warning: warning,
-                        long: long,
-                        lat: lat,
-                        severityLevel: warning?.severityLevel
-                    }
-            }
-        });
-    }
-
-    function filterMarkers(filter: number[]) {
-        removeMarkers();
-        Array.from(currentFloodsMap.values()).map((floodAreaWithWarning: DetailedFloodAreaWithWarning) => {
-            if(floodAreaWithWarning.currentWarning?.severityLevel) {
-                filter.forEach((toBeVisible: number) => {
-                    if(floodAreaWithWarning.currentWarning?.severityLevel == toBeVisible){
-                        addMarker(floodAreaWithWarning.long, floodAreaWithWarning.lat, floodAreaWithWarning.currentWarning);
-                    }
-                });
-            }
-        });
-    }
-
-    function removeMarkers() {
-        dispatchContext({type: "REMOVE_MARKERS", payload: {}})
-    }
 
     const visibility = isOpen? "max-w-1/6 max-h-1/2 z-100 ml-auto mt-60 bg-amber-200/65 opacity-85 transition-all"
         : "max-w-0 max-h-1/2 z-100 ml-auto mt-25 bg-amber-200/65 opacity-85 transition-all"

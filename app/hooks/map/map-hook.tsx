@@ -1,6 +1,6 @@
 'use client'
 import {useReducer, createContext, PropsWithChildren} from "react";
-import {mapDispCtxtWrapper, mapStateCtxtWrapper} from "@/app/hooks/context-wrapper/context-wrapper";
+import {useMapDispatchContext, useMapStateContext} from "@/app/hooks/context-wrapper/context-wrapper";
 import {MapAction, MapState} from "@/app/hooks/states-and-actions";
 
 const defaultState: MapState = {
@@ -62,9 +62,9 @@ export const MapReducer = (
 
 
 export const useStateContext = () => {
-    return mapStateCtxtWrapper(mapStateContext);
+    return useMapStateContext(mapStateContext);
 }
 
 export const useDispatchContext = () => {
-    return mapDispCtxtWrapper(mapDispatchContext);
+    return useMapDispatchContext(mapDispatchContext);
 }

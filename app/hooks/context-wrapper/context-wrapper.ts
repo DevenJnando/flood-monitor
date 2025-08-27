@@ -6,7 +6,7 @@ import {
     SelectedFloodWarningState, SelectedMonitoringStationAction, SelectedMonitoringStationState
 } from "@/app/hooks/states-and-actions";
 
-export const mapStateCtxtWrapper = (contextToUse: Context<MapState>) => {
+export const useMapStateContext = (contextToUse: Context<MapState>) => {
     const context = useContext(contextToUse);
     if(!context) {
         throw new Error("Dispatch context may have been requested outside of Provider.");
@@ -14,7 +14,7 @@ export const mapStateCtxtWrapper = (contextToUse: Context<MapState>) => {
     return context;
 }
 
-export const mapDispCtxtWrapper = (contextToUse: Context<(action: MapAction) => void>) => {
+export const useMapDispatchContext = (contextToUse: Context<(action: MapAction) => void>) => {
     const context = useContext(contextToUse);
     if(!context) {
         throw new Error("Dispatch context may have been requested outside of Provider.");
@@ -22,7 +22,7 @@ export const mapDispCtxtWrapper = (contextToUse: Context<(action: MapAction) => 
     return context;
 }
 
-export const selFloodWarnStateCtxtWrapper = (contextToUse: Context<SelectedFloodWarningState>) => {
+export const useFloodWarningStateContext = (contextToUse: Context<SelectedFloodWarningState>) => {
     const context = useContext(contextToUse);
     if(!context) {
         throw new Error("Dispatch context may have been requested outside of Provider.");
@@ -30,7 +30,7 @@ export const selFloodWarnStateCtxtWrapper = (contextToUse: Context<SelectedFlood
     return context;
 }
 
-export const selFloodWarnDispCtxtWrapper = (contextToUse: Context<(action: SelectedFloodWarningAction) => void>) => {
+export const useFloodWarningDispatchContext = (contextToUse: Context<(action: SelectedFloodWarningAction) => void>) => {
     const context = useContext(contextToUse);
     if(!context) {
         throw new Error("Dispatch context may have been requested outside of Provider.");
@@ -38,7 +38,7 @@ export const selFloodWarnDispCtxtWrapper = (contextToUse: Context<(action: Selec
     return context;
 }
 
-export const selMonitoringStnStateCtxtWrapper = (contextToUse: Context<SelectedMonitoringStationState>) => {
+export const useMonitoringStationStateContext = (contextToUse: Context<SelectedMonitoringStationState>) => {
     const context = useContext(contextToUse);
     if(!context) {
         throw new Error("Dispatch context may have been requested outside of Provider.");
@@ -46,7 +46,7 @@ export const selMonitoringStnStateCtxtWrapper = (contextToUse: Context<SelectedM
     return context;
 }
 
-export const selMonitoringStnDispCtxtWrapper = (contextToUse: Context<(action: SelectedMonitoringStationAction) => void>) => {
+export const useMonitoringStationDispatchContext = (contextToUse: Context<(action: SelectedMonitoringStationAction) => void>) => {
     const context = useContext(contextToUse);
     if(!context) {
         throw new Error("Dispatch context may have been requested outside of Provider.");
