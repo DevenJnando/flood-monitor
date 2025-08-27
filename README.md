@@ -15,17 +15,11 @@ of reasonably doing this...my deepest apologies.
 
 The frontend will not work properly without the proper credentials/endpoints for 
 all the other parts of the stack, but you're welcome to fork and modify the map
-itself to your heart's content. Once you have forked everything and installed all
-dependencies, just run:
+itself to your heart's content. Once you have cloned/forked everything and installed all
+dependencies with ```npm install```, just run:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 and then open your browser to [http://localhost:3000](http://localhost:3000) to see the rendered frontend
