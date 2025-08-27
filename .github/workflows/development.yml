@@ -20,6 +20,9 @@ permissions:
   contents: read
   id-token: write
 
+env:
+  ENV_SECRET: ${{ secrets.FLOOD_MONITORING_SECRET }}
+
 jobs:
   # Build job
   build:
@@ -67,6 +70,9 @@ jobs:
             
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+
+      - name: Create .env file
+        run: echo "${{ env.ENV_SECRET }}" > .env
         
       - name: Build with Next.js
         run: npm run build
@@ -119,6 +125,9 @@ jobs:
             
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+
+      - name: Create .env file
+        run: echo "${{ env.ENV_SECRET }}" > .env
         
       - name: Build with Next.js
         run: npm run build
