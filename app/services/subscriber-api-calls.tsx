@@ -55,6 +55,7 @@ export async function postNewSubscriber(subscriberEmail: string, subscriberPostc
                     await new Promise((resolve) => setTimeout(resolve, 10000));
             }
         } catch (error) {
+            console.error(error)
             console.error("Fetch request failed. Retrying...(attempt " + attempt + " of " + ATTEMPT_LIMIT + ")")
             attempt += 1
             await new Promise((resolve) => setTimeout(resolve, 10000));
@@ -92,6 +93,7 @@ export async function unsubscribe(subscriberID: string): Promise<{message: strin
                     await new Promise((resolve) => setTimeout(resolve, 10000));
             }
         } catch (error) {
+            console.error(error)
             console.error("Fetch request failed. Retrying...(attempt " + attempt + " of " + ATTEMPT_LIMIT + ")")
             attempt += 1
             await new Promise((resolve) => setTimeout(resolve, 10000));

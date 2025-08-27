@@ -31,7 +31,7 @@ const subscriberSchema = z.object(
     }
 )
 
-export async function addSubscriber(prevState: any, formData: FormData) {
+export async function addSubscriber(prevState: {error: boolean, message: string}, formData: FormData) {
     const email = formData.get('email')?.toString()
     const postcodes: string[] | undefined = joinPostcodes(formData)
     const validatedFields = subscriberSchema.safeParse({

@@ -2,8 +2,8 @@
 import {createContext, PropsWithChildren, useReducer} from "react";
 import {MonitoringStation} from "@/app/services/flood-api-interfaces";
 import {
-    selMonitoringStnDispCtxtWrapper,
-    selMonitoringStnStateCtxtWrapper
+    useMonitoringStationDispatchContext,
+    useMonitoringStationStateContext
 } from "@/app/hooks/context-wrapper/context-wrapper";
 import {
     SelectedMonitoringStationAction,
@@ -50,9 +50,9 @@ export const SelectedMonStnReducer = (
 }
 
 export const useSelectedMonStnStateContext = () => {
-    return selMonitoringStnStateCtxtWrapper(selectedMonStnStateContext);
+    return useMonitoringStationStateContext(selectedMonStnStateContext);
 }
 
 export const useSelectedMonStnDispatchContext = () => {
-    return selMonitoringStnDispCtxtWrapper(selectedMonStnDispatchContext);
+    return useMonitoringStationDispatchContext(selectedMonStnDispatchContext);
 }
