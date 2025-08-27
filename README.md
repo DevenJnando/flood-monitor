@@ -3,6 +3,46 @@ Currently, there are two aspects to this frontend: the live flood visualisation 
 and the notification subscription system where you can enter your email + postcode(s)
 you wish to be notified for.
 
+## Prerequisites
+
+Node.js must be installed on your computer in order to run this application.
+### Node.js quick start script for Linux/macOS
+
+```bash 
+# Download and install nvm:
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+
+# in lieu of restarting the shell
+\. "$HOME/.nvm/nvm.sh"
+
+# Download and install Node.js:
+nvm install 22
+
+# Verify the Node.js version:
+node -v # Should print "v22.18.0".
+nvm current # Should print "v22.18.0".
+
+# Verify npm version:
+npm -v # Should print "10.9.3".
+```
+
+### Node.js quick start script for Windows
+
+```powershell
+# Download and install Chocolatey:
+powershell -c "irm https://community.chocolatey.org/install.ps1|iex"
+
+# Download and install Node.js:
+choco install nodejs --version="22.18.0"
+
+# Verify the Node.js version:
+node -v # Should print "v22.18.0".
+
+# Verify npm version:
+npm -v # Should print "10.9.3".
+
+```
+
 ## Introduction
 
 This is a next.js SPA which fetches flood data from the [UK Environmental Agency API](https://environment.data.gov.uk/flood-monitoring/doc/reference)
@@ -64,7 +104,7 @@ The flood map is loaded from the main page of this frontend, but it can also be
 accessed by clicking the `Live Map` link in the navigation bar at the top of the screen.
 
 The map is made using the [react-map-gl](https://visgl.github.io/react-map-gl/), which
-is an extension library which "reactifys" [Mapbox GL](https://www.mapbox.com/mapbox-gljs).
+is an extension library which "reactifies" [Mapbox GL](https://www.mapbox.com/mapbox-gljs).
 This library was chosen for its incredible versatility, customisation and extensibility.
 
 Map markers represent the general location of the flood and, 
