@@ -1,7 +1,7 @@
 'use client'
 import {useReducer, createContext, PropsWithChildren} from "react";
-import {useMapDispatchContext, useMapStateContext} from "@/app/hooks/context-wrapper/context-wrapper";
-import {MapAction, MapState} from "@/app/hooks/states-and-actions";
+import {useMapDispatchContext, useMapStateContext} from "../../hooks/context-wrapper/context-wrapper";
+import {MapAction, MapState} from "../../hooks/states-and-actions";
 
 const defaultState: MapState = {
     markers: [{long: 0, lat: 0, severityLevel: 0}],

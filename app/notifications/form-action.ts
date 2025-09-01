@@ -1,6 +1,6 @@
 'use server'
 import {z} from 'zod'
-import {postNewSubscriber} from "@/app/services/subscriber-api-calls";
+import {postNewSubscriber} from "../services/subscriber-api-calls";
 
 
 function joinPostcodes(formData: FormData): string[] {

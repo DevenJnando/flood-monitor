@@ -4,7 +4,7 @@ import {
     MapState,
     SelectedFloodWarningAction,
     SelectedFloodWarningState, SelectedMonitoringStationAction, SelectedMonitoringStationState
-} from "@/app/hooks/states-and-actions";
+} from "../../hooks/states-and-actions";
 
 export const useMapStateContext = (contextToUse: Context<MapState>) => {
     const context = useContext(contextToUse);

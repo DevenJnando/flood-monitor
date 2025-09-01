@@ -1,9 +1,9 @@
 import {Marker, Layer, Source} from "react-map-gl/mapbox";
-import {MarkerType, LayerType, SourceType} from "@/app/ui/map/map-interfaces"
-import {useStateContext} from "@/app/hooks/map/map-hook";
-import {useSelectedFloodWarningDispatchContext} from "@/app/hooks/flood/selected-flood-hook";
+import {MarkerType, LayerType, SourceType} from "../../ui/map/map-interfaces"
+import {useStateContext} from "../../hooks/map/map-hook";
+import {useSelectedFloodWarningDispatchContext} from "../../hooks/flood/selected-flood-hook";
 import {Fragment, Key} from "react";
-import {SevereWarningMarker, WarningMarker, AlertMarker, NoLongerInForceMarker} from "@/app/ui/map-icons/map-icons";
+import {SevereWarningMarker, WarningMarker, AlertMarker, NoLongerInForceMarker} from "../../ui/map-icons/map-icons";
 
 export const Markers = () => {
     const {markers} = useStateContext();

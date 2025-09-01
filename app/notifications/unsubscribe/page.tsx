@@ -1,6 +1,6 @@
 import {redirect} from 'next/navigation'
-import {unsubscribe} from "@/app/services/subscriber-api-calls";
-import Unsubscribe from "@/app/notifications/unsubscribe/unsubscribe";
+import {unsubscribe} from "../../services/subscriber-api-calls";
+import Unsubscribe from "../../notifications/unsubscribe/unsubscribe";
 
 
 export default async function UnsubscribePage(

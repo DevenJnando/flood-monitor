@@ -5,7 +5,7 @@ import {
     FloodWarning,
     MonitoringStation,
     MeasureReading
-} from "@/app/services/flood-api-interfaces";
+} from "../services/flood-api-interfaces";
 import {GeoJSON} from "geojson";
 
 

@@ -1,11 +1,11 @@
 'use client'
 import {createContext, PropsWithChildren, useReducer} from "react";
-import {FloodWarning} from "@/app/services/flood-api-interfaces";
+import {FloodWarning} from "../../services/flood-api-interfaces";
 import {
     useFloodWarningDispatchContext,
     useFloodWarningStateContext
-} from "@/app/hooks/context-wrapper/context-wrapper";
-import {SelectedFloodWarningAction, SelectedFloodWarningState} from "@/app/hooks/states-and-actions";
+} from "../../hooks/context-wrapper/context-wrapper";
+import {SelectedFloodWarningAction, SelectedFloodWarningState} from "../../hooks/states-and-actions";
 
 const defaultState: SelectedFloodWarningState = {
     selectedWarning: undefined

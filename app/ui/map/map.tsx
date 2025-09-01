@@ -5,28 +5,28 @@ import {
     DetailedFloodAreaWithWarning,
     FloodWarning,
     MonitoringStation
-} from "@/app/services/flood-api-interfaces";
-import {useDispatchContext} from "@/app/hooks/map/map-hook";
-import {getHostName, useWindowSize} from "@/app/hooks/generic-hooks/utility-functions-hook"
-import {generateFloodAreaGeoJSON, generateStationGeoJSON} from "@/app/services/geo-json-bootstrap";
+} from "../../services/flood-api-interfaces";
+import {useDispatchContext} from "../../hooks/map/map-hook";
+import {getHostName, useWindowSize} from "../../hooks/generic-hooks/utility-functions-hook"
+import {generateFloodAreaGeoJSON, generateStationGeoJSON} from "../../services/geo-json-bootstrap";
 import {
     generateFloodPlaneLayer,
     generateStationLayer,
     floodLayersAreVisible,
     setLayerFilter
-} from "@/app/map-styling/layers";
-import {Layers, Markers, Sources} from "@/app/ui/map-widgets/map-widgets";
-import MapLegend from "@/app/ui/map/map-legend";
+} from "../../map-styling/layers";
+import {Layers, Markers, Sources} from "../../ui/map-widgets/map-widgets";
+import MapLegend from "../../ui/map/map-legend";
 import {useEffect, useRef, useState} from "react";
 import {Feature, FeatureCollection} from "geojson";
 import {MapRef} from "react-map-gl/mapbox";
 import {PointLike} from "mapbox-gl";
-import {MeasureType} from "@/app/map-styling/layer-enums";
-import {useSelectedMonStnDispatchContext} from "@/app/hooks/monitoring-station/selected-monitoring-station-hook";
-import {useToastContext} from "@/app/hooks/toast/toast-hook";
+import {MeasureType} from "../../map-styling/layer-enums";
+import {useSelectedMonStnDispatchContext} from "../../hooks/monitoring-station/selected-monitoring-station-hook";
+import {useToastContext} from "../../hooks/toast/toast-hook";
 import {flushSync} from "react-dom";
-import {SignedLayoutSpecification, SignedPaintSpecification} from "@/app/ui/map/map-interfaces";
-import {useSelectedFloodWarningDispatchContext} from "@/app/hooks/flood/selected-flood-hook";
+import {SignedLayoutSpecification, SignedPaintSpecification} from "../../ui/map/map-interfaces";
+import {useSelectedFloodWarningDispatchContext} from "../../hooks/flood/selected-flood-hook";
 
 function loadMapImage(mapRef: MapRef, imageName: string, link: string) {
     mapRef.loadImage(link,

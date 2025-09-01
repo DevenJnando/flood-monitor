@@ -1,10 +1,10 @@
 'use client'
 
 import * as React from "react";
-import Navbar from "@/app/ui/navbar/navbar"
-import {addSubscriber} from "@/app/notifications/form-action";
+import Navbar from "../ui/navbar/navbar"
+import {addSubscriber} from "./form-action";
 import {useActionState} from "react";
-import LoadingSpinner from "@/app/ui/spinner/LoadingSpinner";
+import LoadingSpinner from "../ui/spinner/loading-spinner";
 
 
 const initialState = {

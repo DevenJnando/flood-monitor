@@ -3,14 +3,14 @@ import {
     Measure,
     MeasureReading,
     MonitoringStation
-} from "@/app/services/flood-api-interfaces";
+} from "../../services/flood-api-interfaces";
 import {
     getAllMonitoringStations,
     getDetailedFloodAreasWithWarnings, getLatestReadings,
     updateFloodAreaGeoJsons
-} from "@/app/services/flood-api-calls";
-import {MapSkeleton} from "@/app/ui/map/map-skeleton";
-import FloodMap from "@/app/ui/map/map";
+} from "../../services/flood-api-calls";
+import {MapSkeleton} from "../../ui/map/map-skeleton";
+import FloodMap from "../../ui/map/map";
 import {Suspense} from "react";
 import * as React from "react";
 

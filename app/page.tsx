@@ -1,14 +1,14 @@
 import * as React from "react";
-import {MapProvider} from "@/app/hooks/map/map-hook";
-import {MapSkeleton} from "@/app/ui/map/map-skeleton";
-import SelectedFlood from "@/app/ui/selected-flood/selected-flood";
-import SelectedMonitoringStation from "@/app/ui/selected-monitoring-station/selected-monitoring-station";
-import {SelectedFloodProvider} from "@/app/hooks/flood/selected-flood-hook";
-import {SelectedMonStnProvider} from "@/app/hooks/monitoring-station/selected-monitoring-station-hook";
-import {ToastProvider} from "@/app/hooks/toast/toast-hook";
-import Navbar from "@/app/ui/navbar/navbar"
+import {MapProvider} from "./hooks/map/map-hook";
+import {MapSkeleton} from "./ui/map/map-skeleton";
+import SelectedFlood from "./ui/selected-flood/selected-flood";
+import SelectedMonitoringStation from "./ui/selected-monitoring-station/selected-monitoring-station";
+import {SelectedFloodProvider} from "./hooks/flood/selected-flood-hook";
+import {SelectedMonStnProvider} from "./hooks/monitoring-station/selected-monitoring-station-hook";
+import {ToastProvider} from "./hooks/toast/toast-hook";
+import Navbar from "./ui/navbar/navbar"
 import {Suspense} from "react";
-import MapRenderer from "@/app/ui/map/map-renderer";
+import MapRenderer from "./ui/map/map-renderer";
 
 
 export default async function Home(

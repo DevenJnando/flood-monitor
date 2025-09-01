@@ -1,7 +1,7 @@
 import {ExpressionSpecification} from "mapbox-gl";
 import {MapRef} from "react-map-gl/mapbox";
-import {MeasureType} from "@/app/map-styling/layer-enums";
-import {SignedLayoutSpecification, SignedPaintSpecification} from "@/app/ui/map/map-interfaces";
+import {MeasureType} from "../map-styling/layer-enums";
+import {SignedLayoutSpecification, SignedPaintSpecification} from "../ui/map/map-interfaces";
 
 export function floodLayersAreVisible(mapRef: MapRef | null, isVisible: boolean, floodIds: Array<string>) {
     if(isVisible) {

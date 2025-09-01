@@ -1,7 +1,7 @@
 'use server';
 import {GeoJSON} from "geojson";
 import {LayoutSpecification, PaintSpecification} from "mapbox-gl";
-import {FloodWarning} from "@/app/services/flood-api-interfaces";
+import {FloodWarning} from "../../services/flood-api-interfaces";
 
 export interface SignedPaintSpecification extends PaintSpecification {
     discriminator: "PaintSpecification";

@@ -1,4 +1,4 @@
-import {DetailedFloodAreaWithWarning, MonitoringStation} from "@/app/services/flood-api-interfaces";
+import {DetailedFloodAreaWithWarning, MonitoringStation} from "../services/flood-api-interfaces";
 import {Feature, GeoJSON} from "geojson";
 
 function defaultFeature() {

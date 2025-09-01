@@ -2,7 +2,7 @@
 import {
     useSelectedFloodWarningDispatchContext,
     useSelectedFloodWarningStateContext
-} from "@/app/hooks/flood/selected-flood-hook"
+} from "../../hooks/flood/selected-flood-hook"
 import {Fragment} from "react";
 import Image from "next/image";
 

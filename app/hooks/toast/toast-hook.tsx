@@ -1,7 +1,7 @@
 'use client'
 import {createContext, PropsWithChildren, useContext, useState} from "react";
-import {ToastType, ToastTypeInterface} from "@/app/ui/toast/toast-interface";
-import ToastComponent from "@/app/ui/toast/toast-component";
+import {ToastType, ToastTypeInterface} from "../../ui/toast/toast-interface";
+import ToastComponent from "../../ui/toast/toast-component";
 
 export const toastContext = createContext<ToastTypeInterface | undefined>(undefined);
 

@@ -1,4 +1,4 @@
-import {FloodWarning, MonitoringStation} from "@/app/services/flood-api-interfaces";
+import {FloodWarning, MonitoringStation} from "../services/flood-api-interfaces";
 import {Feature, FeatureCollection} from "geojson";
 import {
     LayerType,
@@ -6,8 +6,8 @@ import {
     SignedLayoutSpecification,
     SignedPaintSpecification,
     SourceType
-} from "@/app/ui/map/map-interfaces";
-import {ToastData} from "@/app/ui/toast/toast-interface";
+} from "../ui/map/map-interfaces";
+import {ToastData} from "../ui/toast/toast-interface";
 
 export interface SelectedFloodWarningState {
     selectedWarning: FloodWarning | undefined;

@@ -1,5 +1,5 @@
 'use server'
-import {CONSTANTS} from "@/app/constants/constants";
+import {CONSTANTS} from "../constants/constants";
 
 
 export async function postNewSubscriber(subscriberEmail: string, subscriberPostcodes: string[]):

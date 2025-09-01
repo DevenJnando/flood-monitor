@@ -1,14 +1,14 @@
 'use client'
 import {createContext, PropsWithChildren, useReducer} from "react";
-import {MonitoringStation} from "@/app/services/flood-api-interfaces";
+import {MonitoringStation} from "../../services/flood-api-interfaces";
 import {
     useMonitoringStationDispatchContext,
     useMonitoringStationStateContext
-} from "@/app/hooks/context-wrapper/context-wrapper";
+} from "../../hooks/context-wrapper/context-wrapper";
 import {
     SelectedMonitoringStationAction,
     SelectedMonitoringStationState
-} from "@/app/hooks/states-and-actions";
+} from "../../hooks/states-and-actions";
 
 const defaultState: SelectedMonitoringStationState = {
     selectedStation: undefined

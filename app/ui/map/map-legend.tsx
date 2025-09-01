@@ -7,13 +7,13 @@ import {
     WarningMarker,
     LegendIcon,
     RiverStationIcon, TidalStationIcon, RainfallStationIcon, GroundwaterStationIcon
-} from "@/app/ui/map-icons/map-icons";
-import {useDispatchContext} from "@/app/hooks/map/map-hook";
-import {DetailedFloodAreaWithWarning, FloodWarning, MonitoringStation} from "@/app/services/flood-api-interfaces";
+} from "../../ui/map-icons/map-icons";
+import {useDispatchContext} from "../../hooks/map/map-hook";
+import {DetailedFloodAreaWithWarning, FloodWarning, MonitoringStation} from "../../services/flood-api-interfaces";
 import {Checkbox} from "primereact/checkbox";
-import {MeasureType} from "@/app/map-styling/layer-enums";
-import {FloodFilters, StationFilters} from "@/app/ui/map/map-interfaces";
-import {monitoringStationLayerIdIsVisible} from "@/app/map-styling/layers";
+import {MeasureType} from "../../map-styling/layer-enums";
+import {FloodFilters, StationFilters} from "../../ui/map/map-interfaces";
+import {monitoringStationLayerIdIsVisible} from "../../map-styling/layers";
 import {MapRef} from "react-map-gl/mapbox";
 
 export default function MapLegend({mapRef, currentFloodsMap}: {
