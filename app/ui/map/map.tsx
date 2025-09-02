@@ -317,13 +317,13 @@ export default function FloodMap(
                        mapRef.current.resize()
                        // REMEMBER to fix this! This is temporary just so the images load in development.
                        loadMapImage(mapRef.current, MeasureType.UPSTREAM_STAGE,
-                           process.env.NEXT_PUBLIC_PROTOCOL + getHostName() + ":3000/river-system.png");
+                           process.env.NEXT_PUBLIC_PROTOCOL + getHostName() + "/river-system.png");
                        loadMapImage(mapRef.current, MeasureType.TIDAL_LEVEL,
-                           process.env.NEXT_PUBLIC_PROTOCOL + getHostName() + ":3000/river-and-lake-flow-monitoring-points.png");
+                           process.env.NEXT_PUBLIC_PROTOCOL + getHostName() + "/river-and-lake-flow-monitoring-points.png");
                        loadMapImage(mapRef.current, MeasureType.GROUNDWATER,
-                           process.env.NEXT_PUBLIC_PROTOCOL + getHostName() + ":3000/groundwater-source.png");
+                           process.env.NEXT_PUBLIC_PROTOCOL + getHostName() + "/groundwater-source.png");
                        loadMapImage(mapRef.current, MeasureType.RAINFALL,
-                           process.env.NEXT_PUBLIC_PROTOCOL + getHostName() + ":3000/light-rain-83.png");
+                           process.env.NEXT_PUBLIC_PROTOCOL + getHostName() + "/light-rain-83.png");
                    }
                    populateMap();
                }}
