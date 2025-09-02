@@ -14,6 +14,7 @@ import FloodMap from "../../ui/map/map";
 import {Suspense} from "react";
 import * as React from "react";
 
+export const experimental_ppr = true
 
 export default async function MapRenderer({selectedFloodID=undefined}: {selectedFloodID : string | undefined}) {
 

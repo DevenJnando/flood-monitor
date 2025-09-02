@@ -1,7 +1,14 @@
 import {useEffect, useState} from "react";
 
 export function getHostName() {
-    return window.location.hostname;
+    switch (process.env.NEXT_PUBLIC_BUILD) {
+        case "dev":
+            return window.location.hostname + ":" + process.env.NEXT_PUBLIC_PORT;
+        case "prod":
+            return window.location.hostname;
+        default:
+            return "";
+    }
 }
 
 export function useWindowSize() {

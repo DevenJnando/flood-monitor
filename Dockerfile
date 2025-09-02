@@ -29,6 +29,7 @@ COPY . .
 # ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm i -g next
 RUN npm i -D pnpm
+RUN pnpm i next@canary
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
