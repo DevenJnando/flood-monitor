@@ -28,8 +28,7 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm i -g next
-RUN npm i pnpm --global
-RUN pnpm i next@canary
+RUN npm i -D pnpm
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
