@@ -32,7 +32,11 @@ export default function NotificationsPage() {
                     <label className="shrink" htmlFor="email">Email</label>
                     <div className="mt-2 shrink">
                         <input className="w-100 h-8 bg-gray-500 shrink text-black font-semibold"
-                               type="text" id="email" name="email" required />
+                               type="text"
+                               id="email"
+                               name="email"
+                               maxLength={50}
+                               required />
                     </div>
 
                     <div className="mt-10">
@@ -40,7 +44,11 @@ export default function NotificationsPage() {
                     </div>
                     <div className="mt-2">
                         <input className="w-100 h-8 bg-gray-500 shrink text-black font-semibold"
-                               type="postcode" id="postcode" name="postcode" required />
+                               type="postcode"
+                               id="postcode"
+                               name="postcode"
+                               maxLength={90}
+                               required />
                     </div>
                     <div className="mt-5">
                         <button className="bg-blue-500 hover:bg-blue-700 shrink text-black font-bold py-2 px-4 rounded-full"
