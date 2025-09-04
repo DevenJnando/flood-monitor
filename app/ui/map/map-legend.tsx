@@ -181,8 +181,24 @@ export default function MapLegend({mapRef, currentFloodsMap}: {
     };
 
 
-    const visibility = isOpen? "max-w-1/6 max-h-1/2 z-100 ml-auto mt-60 bg-amber-200/65 opacity-85 transition-all"
-        : "max-w-0 max-h-1/2 z-100 ml-auto mt-25 bg-amber-200/65 opacity-85 transition-all"
+    const visibility = isOpen?
+        "max-w-1/5 " +
+        "sm:max-w-1/5 " +
+        "z-100 " +
+        "ml-auto " +
+        "mt-60 " +
+        "bg-amber-200/65 " +
+        "opacity-85 " +
+        "transition-all"
+        :
+        "max-w-0 " +
+        "z-100 " +
+        "ml-auto " +
+        "mt-25 " +
+        "bg-amber-200/65 " +
+        "opacity-85 " +
+        "transition-all"
+
     return(
         <div className="overflow-hidden">
             <div className="float-right mt-40 cursor-pointer z-60 opacity-90 bg-gray-500/40">
@@ -197,7 +213,7 @@ export default function MapLegend({mapRef, currentFloodsMap}: {
                         toggleCheckedFloods(1);
                     }}/>
                     <SevereWarningMarker/>
-                    <h1 className="h-1/2 text-black font-bold">
+                    <h1 className="hidden xl:block h-1/2 text-black font-bold">
                         Severe Flood Warning
                     </h1>
                 </div>
@@ -206,7 +222,7 @@ export default function MapLegend({mapRef, currentFloodsMap}: {
                         toggleCheckedFloods(2);
                     }}/>
                     <WarningMarker/>
-                    <h1 className="h-1/2 text-black font-bold">
+                    <h1 className="hidden xl:block h-1/2 text-black font-bold">
                         Flood Warning
                     </h1>
                 </div>
@@ -215,7 +231,7 @@ export default function MapLegend({mapRef, currentFloodsMap}: {
                         toggleCheckedFloods(3);
                     }}/>
                     <AlertMarker/>
-                    <h1 className="h-1/2 text-black font-bold">
+                    <h1 className="hidden xl:block h-1/2 text-black font-bold">
                         Flood Alert
                     </h1>
                 </div>
@@ -224,7 +240,7 @@ export default function MapLegend({mapRef, currentFloodsMap}: {
                         toggleCheckedFloods(4);
                     }}/>
                     <NoLongerInForceMarker/>
-                    <h1 className="h-1/2 text-black font-bold">
+                    <h1 className="hidden xl:block h-1/2 text-black font-bold">
                         Alert/Warning No Longer in Force
                     </h1>
                 </div>
@@ -233,7 +249,7 @@ export default function MapLegend({mapRef, currentFloodsMap}: {
                         toggleCheckedStations(1);
                     }}/>
                     <RiverStationIcon/>
-                    <h1 className="h-1/2 text-black font-bold">
+                    <h1 className="hidden xl:block h-1/2 text-black font-bold">
                         River Monitoring Stations
                     </h1>
                 </div>
@@ -242,7 +258,7 @@ export default function MapLegend({mapRef, currentFloodsMap}: {
                         toggleCheckedStations(2);
                     }}/>
                     <TidalStationIcon/>
-                    <h1 className="h-1/2 text-black font-bold">
+                    <h1 className="hidden xl:block h-1/2 text-black font-bold">
                         Tidal Monitoring Stations
                     </h1>
                 </div>
@@ -251,7 +267,7 @@ export default function MapLegend({mapRef, currentFloodsMap}: {
                         toggleCheckedStations(3);
                     }}/>
                     <RainfallStationIcon/>
-                    <h1 className="h-1/2 text-black font-bold">
+                    <h1 className="hidden xl:block h-1/2 text-black font-bold">
                         Rainfall Monitoring Stations
                     </h1>
                 </div>
@@ -260,23 +276,23 @@ export default function MapLegend({mapRef, currentFloodsMap}: {
                         toggleCheckedStations(4);
                     }}/>
                     <GroundwaterStationIcon/>
-                    <h1 className="h-1/2 text-black font-bold">
+                    <h1 className="hidden xl:block h-1/2 text-black font-bold">
                         Groundwater Monitoring Stations
                     </h1>
                 </div>
                 <div className="flex items-center ml-4 mt-3 justify-items-start space-x-13 right-0">
-                    <h1 className="h-1/2 text-black font-bold">
+                    <h1 className="hidden xl:block h-1/2 text-black font-bold">
                         AOD:
                     </h1>
-                    <h1 className="h-1/2 text-black font-bold">
+                    <h1 className="hidden xl:block h-1/2 text-black font-bold">
                         Above Ordinance Datum
                     </h1>
                 </div>
                 <div className="flex items-center ml-4 mt-3 justify-items-start space-x-13 right-0">
-                    <h1 className="h-1/2 text-black font-bold">
+                    <h1 className="hidden xl:block h-1/2 text-black font-bold">
                         ASD:
                     </h1>
-                    <h1 className="h-1/2 text-black font-bold">
+                    <h1 className="hidden xl:block h-1/2 text-black font-bold">
                         Above Surface Datum
                     </h1>
                 </div>
